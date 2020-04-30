@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>1FDA753A-7694-41B7-8C00-AA39FD0780CA</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>HexagonalLib</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Coordinates\Axial.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Coordinates\Cubic.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Coordinates\Offset.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)HexagonalException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)HexagonalGrid.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)HexagonalGridType.cs" />
+  </ItemGroup>
+</Project>
