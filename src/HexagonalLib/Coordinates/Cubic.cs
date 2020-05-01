@@ -3,7 +3,7 @@
 namespace HexagonalLib.Coordinates
 {
     [Serializable]
-    public readonly partial struct Cubic
+    public readonly partial struct Cubic : IEquatable<Cubic>
     {
         public static Cubic Zero => new Cubic(0, 0, 0);
 
@@ -116,13 +116,12 @@ namespace HexagonalLib.Coordinates
 
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(obj, null))
-            {
-                return false;
-            }
+            return obj is Cubic other && Equals(other);
+        }
 
-            var other = (Cubic) obj;
-            return (X, Y, Z).Equals((other.X, other.Y, other.Z));
+        public bool Equals(Cubic other)
+        {
+            return (X, Y, Z) == (other.X, other.Y, other.Z);
         }
 
         public override int GetHashCode()

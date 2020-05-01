@@ -3,7 +3,7 @@
 namespace HexagonalLib.Coordinates
 {
     [Serializable]
-    public readonly partial struct Axial
+    public readonly partial struct Axial : IEquatable<Axial>
     {
         public static Axial Zero => new Axial(0, 0);
 
@@ -54,16 +54,11 @@ namespace HexagonalLib.Coordinates
 
         public bool Equals(Axial other)
         {
-            return Q == other.Q && R == other.R;
+            return (Q, R) == (other.Q, other.R);
         }
 
         public override bool Equals(object other)
         {
-            if (ReferenceEquals(null, other))
-            {
-                return false;
-            }
-
             return other is Axial axial && Equals(axial);
         }
 

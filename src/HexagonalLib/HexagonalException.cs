@@ -5,17 +5,17 @@ namespace HexagonalLib
 {
     public class HexagonalException : Exception
     {
-        private class Builder
+        private class MessageBuilder
         {
             private readonly StringBuilder _message = new StringBuilder();
 
-            public Builder Append(string message)
+            public MessageBuilder Append(string message)
             {
                 _message.AppendLine(message);
                 return this;
             }
 
-            public Builder Append(HexagonalGrid grid)
+            public MessageBuilder Append(HexagonalGrid grid)
             {
                 Append(nameof(grid.Type), grid.Type);
                 Append(nameof(grid.InscribedRadius), grid.InscribedRadius);
@@ -23,7 +23,7 @@ namespace HexagonalLib
                 return this;
             }
 
-            public Builder Append(params (string, object)[] fields)
+            public MessageBuilder Append(params (string, object)[] fields)
             {
                 foreach (var (paramName, paramValue) in fields)
                 {
@@ -64,9 +64,9 @@ namespace HexagonalLib
         {
         }
 
-        private static Builder CreateBuilder(string message)
+        private static MessageBuilder CreateBuilder(string message)
         {
-            return new Builder().Append(message);
+            return new MessageBuilder().Append(message);
         }
     }
 }

@@ -364,58 +364,50 @@ namespace HexagonalLib
 
         #endregion
 
-        /// <summary>
-        /// Checks whether the two hexes are neighbors or no
-        /// </summary>
-        public bool IsNeighbors(Offset index1, Offset index2)
-        {
-            foreach (var offset in GetNeighborsOffsets(index1))
-            {
-                if (index1 + offset == index2)
-                {
-                    return true;
-                }
-            }
+        #region GetNeighbor
 
-            return false;
+        /// <summary>
+        /// Returns the neighbor at the specified index.
+        /// </summary>
+        public Offset GetNeighbor(Offset coord, int neighborIndex)
+        {
+            return coord + GetNeighbor(neighborIndex, GetNeighborsOffsets(coord));
         }
 
         /// <summary>
-        /// Returns a ring with a radius of <see cref="radius"/> hexes around the given <see cref="center"/>.
+        /// Returns the neighbor at the specified index.
         /// </summary>
-        public IEnumerable<Offset> GetNeighborsRing(Offset center, int radius)
+        public Axial GetNeighbor(Axial coord, int neighborIndex)
         {
-            if (radius == 0)
-            {
-                yield return center;
-                yield break;
-            }
-
-            for (var i = 0; i < radius; i++)
-            {
-                center = GetNeighbor(center, 4);
-            }
-
-            for (var i = 0; i < 6; i++)
-            {
-                for (var j = 0; j < radius; j++)
-                {
-                    yield return center;
-                    center = GetNeighbor(center, i);
-                }
-            }
+            return coord + GetNeighbor(neighborIndex, _axialNeighbors);
         }
 
-        public IEnumerable<Offset> GetNeighborsAround(Offset center, int radius)
+        /// <summary>
+        /// Returns the neighbor at the specified index.
+        /// </summary>
+        public Cubic GetNeighbor(Cubic coord, int neighborIndex)
         {
-            for (var i = 0; i < radius; i++)
-            {
-                foreach (var hex in GetNeighborsRing(center, i))
-                {
-                    yield return hex;
-                }
-            }
+            return coord + GetNeighbor(neighborIndex, _cubicNeighbors);
         }
+
+        /// <summary>
+        /// Returns the neighbor at the specified index.
+        /// </summary>
+        private static T GetNeighbor<T>(int neighborIndex, IReadOnlyList<T> neighbors)
+        {
+            neighborIndex = neighborIndex % EdgesCount;
+            if (neighborIndex < 0)
+            {
+                neighborIndex += EdgesCount;
+            }
+
+            var dir = neighbors[neighborIndex];
+            return dir;
+        }
+
+        #endregion
+
+        #region GetNeighbors
 
         /// <summary>
         /// Return all neighbors of the hex
@@ -429,9 +421,301 @@ namespace HexagonalLib
         }
 
         /// <summary>
+        /// Return all neighbors of the hex
+        /// </summary>
+        public IEnumerable<Axial> GetNeighbors(Axial hex)
+        {
+            foreach (var offset in _axialNeighbors)
+            {
+                yield return offset + hex;
+            }
+        }
+
+        /// <summary>
+        /// Return all neighbors of the hex
+        /// </summary>
+        public IEnumerable<Cubic> GetNeighbors(Cubic hex)
+        {
+            foreach (var offset in _cubicNeighbors)
+            {
+                yield return offset + hex;
+            }
+        }
+
+        #endregion
+
+        #region IsNeighbors
+
+        /// <summary>
+        /// Checks whether the two hexes are neighbors or no
+        /// </summary>
+        public bool IsNeighbors(Offset coord1, Offset coord2)
+        {
+            return IsNeighbors(coord1, coord2, GetNeighbor);
+        }
+
+        /// <summary>
+        /// Checks whether the two hexes are neighbors or no
+        /// </summary>
+        public bool IsNeighbors(Axial coord1, Axial coord2)
+        {
+            return IsNeighbors(coord1, coord2, GetNeighbor);
+        }
+
+        /// <summary>
+        /// Checks whether the two hexes are neighbors or no
+        /// </summary>
+        public bool IsNeighbors(Cubic coord1, Cubic coord2)
+        {
+            return IsNeighbors(coord1, coord2, GetNeighbor);
+        }
+
+        /// <summary>
+        /// Checks whether the two hexes are neighbors or no
+        /// </summary>
+        public bool IsNeighbors<T>(T coord1, T coord2, Func<T, int, T> getNeighbor)
+            where T : struct, IEquatable<T>
+        {
+            for (var neighborIndex = 0; neighborIndex < EdgeLength; neighborIndex++)
+            {
+                var neighbor = getNeighbor(coord1, neighborIndex);
+                if (neighbor.Equals(coord2))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        #endregion
+
+        #region GetNeighborsRing
+
+        /// <summary>
+        /// Returns a ring with a radius of <see cref="radius"/> hexes around the given <see cref="center"/>.
+        /// </summary>
+        public IEnumerable<Offset> GetNeighborsRing(Offset center, int radius)
+        {
+            return GetNeighborsRing(center, radius, GetNeighbor);
+        }
+
+        /// <summary>
+        /// Returns a ring with a radius of <see cref="radius"/> hexes around the given <see cref="center"/>.
+        /// </summary>
+        public IEnumerable<Axial> GetNeighborsRing(Axial center, int radius)
+        {
+            return GetNeighborsRing(center, radius, GetNeighbor);
+        }
+
+        /// <summary>
+        /// Returns a ring with a radius of <see cref="radius"/> hexes around the given <see cref="center"/>.
+        /// </summary>
+        public IEnumerable<Cubic> GetNeighborsRing(Cubic center, int radius)
+        {
+            return GetNeighborsRing(center, radius, GetNeighbor);
+        }
+
+        /// <summary>
+        /// Returns a ring with a radius of <see cref="radius"/> hexes around the given <see cref="center"/>.
+        /// </summary>
+        private static IEnumerable<T> GetNeighborsRing<T>(T center, int radius, Func<T, int, T> getNeighbor)
+        {
+            if (radius == 0)
+            {
+                yield return center;
+                yield break;
+            }
+
+            for (var i = 0; i < radius; i++)
+            {
+                center = getNeighbor(center, 4);
+            }
+
+            for (var i = 0; i < 6; i++)
+            {
+                for (var j = 0; j < radius; j++)
+                {
+                    yield return center;
+                    center = getNeighbor(center, i);
+                }
+            }
+        }
+
+        #endregion
+
+        #region GetNeighborsAround
+
+        /// <summary>
+        /// Returns a all hexes in the ring with a radius of <see cref="radius"/> hexes around the given <see cref="center"/>.
+        /// </summary>
+        public IEnumerable<Offset> GetNeighborsAround(Offset center, int radius)
+        {
+            return GetNeighborsAround(center, radius, GetNeighborsRing);
+        }
+
+        /// <summary>
+        /// Returns a all hexes in the ring with a radius of <see cref="radius"/> hexes around the given <see cref="center"/>.
+        /// </summary>
+        public IEnumerable<Axial> GetNeighborsAround(Axial center, int radius)
+        {
+            return GetNeighborsAround(center, radius, GetNeighborsRing);
+        }
+
+        /// <summary>
+        /// Returns a all hexes in the ring with a radius of <see cref="radius"/> hexes around the given <see cref="center"/>.
+        /// </summary>
+        public IEnumerable<Cubic> GetNeighborsAround(Cubic center, int radius)
+        {
+            return GetNeighborsAround(center, radius, GetNeighborsRing);
+        }
+
+        /// <summary>
+        /// Returns a all hexes in the ring with a radius of <see cref="radius"/> hexes around the given <see cref="center"/>.
+        /// </summary>
+        private static IEnumerable<T> GetNeighborsAround<T>(T center, int radius, Func<T, int, IEnumerable<T>> getNeighborRing)
+        {
+            for (var i = 0; i < radius; i++)
+            {
+                foreach (var hex in getNeighborRing(center, i))
+                {
+                    yield return hex;
+                }
+            }
+        }
+
+        #endregion
+
+        #region GetNeighborIndex
+
+        /// <summary>
+        /// Returns the bypass index to the specified neighbor
+        /// </summary>
+        public byte GetNeighborIndex(Offset center, Offset neighbor)
+        {
+            return GetNeighborIndex(center, neighbor, GetNeighbors);
+        }
+
+        /// <summary>
+        /// Returns the bypass index to the specified neighbor
+        /// </summary>
+        public byte GetNeighborIndex(Axial center, Axial neighbor)
+        {
+            return GetNeighborIndex(center, neighbor, GetNeighbors);
+        }
+
+        /// <summary>
+        /// Returns the bypass index to the specified neighbor
+        /// </summary>
+        public byte GetNeighborIndex(Cubic center, Cubic neighbor)
+        {
+            return GetNeighborIndex(center, neighbor, GetNeighbors);
+        }
+
+        /// <summary>
+        /// Returns the bypass index to the specified neighbor
+        /// </summary>
+        private byte GetNeighborIndex<T>(T center, T neighbor, Func<T, IEnumerable<T>> getNeighbors)
+            where T : struct, IEquatable<T>
+        {
+            byte neighborIndex = 0;
+            foreach (var current in getNeighbors(center))
+            {
+                if (current.Equals(neighbor))
+                {
+                    return neighborIndex;
+                }
+
+                neighborIndex++;
+            }
+
+            throw new HexagonalException($"Can't find bypass index", this, (nameof(center), center), (nameof(neighbor), neighbor));
+        }
+
+        #endregion
+
+        #region GetPointBetweenTwoNeighbours
+
+        /// <summary>
+        /// Returns the midpoint of the boundary segment of two neighbors
+        /// </summary>
+        public (float x, float y) GetPointBetweenTwoNeighbours(Offset coord1, Offset coord2)
+        {
+            return GetPointBetweenTwoNeighbours(coord1, coord2, IsNeighbors, ToPoint2);
+        }
+
+        /// <summary>
+        /// Returns the midpoint of the boundary segment of two neighbors
+        /// </summary>
+        public (float x, float y) GetPointBetweenTwoNeighbours(Axial coord1, Axial coord2)
+        {
+            return GetPointBetweenTwoNeighbours(coord1, coord2, IsNeighbors, ToPoint2);
+        }
+
+        /// <summary>
+        /// Returns the midpoint of the boundary segment of two neighbors
+        /// </summary>
+        public (float x, float y) GetPointBetweenTwoNeighbours(Cubic coord1, Cubic coord2)
+        {
+            return GetPointBetweenTwoNeighbours(coord1, coord2, IsNeighbors, ToPoint2);
+        }
+
+        /// <summary>
+        /// Returns the midpoint of the boundary segment of two neighbors
+        /// </summary>
+        private (float x, float y) GetPointBetweenTwoNeighbours<T>(T coord1, T coord2, Func<T, T, bool> isNeighbor, Func<T, (float x, float y)> toPoint)
+        {
+            if (!isNeighbor(coord1, coord2))
+            {
+                throw new HexagonalException($"Can't calculate point between not neighbors", this, (nameof(coord1), coord1), (nameof(coord2), coord2));
+            }
+
+            var c1 = toPoint(coord1);
+            var c2 = toPoint(coord2);
+
+            return ((c1.x + c2.x) / 2, (c1.y + c2.y) / 2);
+        }
+
+        #endregion
+
+        #region CubeDistance
+
+        /// <summary>
+        /// Manhattan distance between two hexes
+        /// </summary>
+        public int CubeDistance(Offset h1, Offset h2)
+        {
+            var cubicFrom = ToCube(h1);
+            var cubicTo = ToCube(h2);
+            return CubeDistance(cubicFrom, cubicTo);
+        }
+
+        /// <summary>
+        /// Manhattan distance between two hexes
+        /// </summary>
+        public int CubeDistance(Axial h1, Axial h2)
+        {
+            var cubicFrom = ToCube(h1);
+            var cubicTo = ToCube(h2);
+            return CubeDistance(cubicFrom, cubicTo);
+        }
+
+        /// <summary>
+        /// Manhattan distance between two hexes
+        /// </summary>
+        public static int CubeDistance(Cubic h1, Cubic h2)
+        {
+            return (Math.Abs(h1.X - h2.X) + Math.Abs(h1.Y - h2.Y) + Math.Abs(h1.Z - h2.Z)) / 2;
+        }
+
+        #endregion
+
+        #region Neighbors
+
+        /// <summary>
         /// Return all neighbors offsets of the hex
         /// </summary>
-        public IReadOnlyList<Offset> GetNeighborsOffsets(Offset coord)
+        private IReadOnlyList<Offset> GetNeighborsOffsets(Offset coord)
         {
             switch (Type)
             {
@@ -448,89 +732,42 @@ namespace HexagonalLib
             }
         }
 
-        /// <summary>
-        /// Returns the neighbor at the specified index.
-        /// </summary>
-        public Offset GetNeighbor(Offset coord, int neighborIndex)
-        {
-            neighborIndex = (EdgesCount + neighborIndex % EdgesCount) % EdgesCount;
-            var dir = GetNeighborsOffsets(coord)[neighborIndex];
-            return coord + dir;
-        }
-
-        /// <summary>
-        /// Returns the direction to the specified neighbor
-        /// </summary>
-        public byte GetBypassIndex(Offset center, Offset neighbor)
-        {
-            var offsets = GetNeighborsOffsets(center);
-            for (byte i = 0; i < offsets.Count; i++)
-            {
-                if (center + offsets[i] == neighbor)
-                {
-                    return i;
-                }
-            }
-
-            throw new HexagonalException($"Can't find bypass index", this, (nameof(center), center), (nameof(neighbor), neighbor));
-        }
-
-        /// <summary>
-        /// Manhattan distance between two hexes
-        /// </summary>
-        public int CubeDistance(Offset h1, Offset h2)
-        {
-            var cubicFrom = ToCube(h1);
-            var cubicTo = ToCube(h2);
-            return CubeDistance(cubicFrom, cubicTo);
-        }
-
-        /// <summary>
-        /// Manhattan distance between two hexes
-        /// </summary>
-        public static int CubeDistance(Cubic h1, Cubic h2)
-        {
-            return (Math.Abs(h1.X - h2.X) + Math.Abs(h1.Y - h2.Y) + Math.Abs(h1.Z - h2.Z)) / 2;
-        }
-
         private static readonly List<Offset> _pointyOddNeighbors = new List<Offset>
         {
-            new Offset(0, +1),
-            new Offset(+1, 0),
-            new Offset(0, -1),
-            new Offset(-1, -1),
-            new Offset(-1, 0),
-            new Offset(-1, +1),
+            new Offset(0, +1), new Offset(+1, 0), new Offset(0, -1),
+            new Offset(-1, -1), new Offset(-1, 0), new Offset(-1, +1),
         };
 
         private static readonly List<Offset> _pointyEvenNeighbors = new List<Offset>
         {
-            new Offset(+1, +1),
-            new Offset(+1, 0),
-            new Offset(+1, -1),
-            new Offset(0, -1),
-            new Offset(-1, 0),
-            new Offset(0, +1),
+            new Offset(+1, +1), new Offset(+1, 0), new Offset(+1, -1),
+            new Offset(0, -1), new Offset(-1, 0), new Offset(0, +1),
         };
 
         private static readonly List<Offset> _flatOddNeighbors = new List<Offset>
         {
-            new Offset(0, +1),
-            new Offset(+1, 0),
-            new Offset(+1, -1),
-            new Offset(0, -1),
-            new Offset(-1, -1),
-            new Offset(-1, 0),
+            new Offset(0, +1), new Offset(+1, 0), new Offset(+1, -1),
+            new Offset(0, -1), new Offset(-1, -1), new Offset(-1, 0),
         };
 
         private static readonly List<Offset> _flatEvenNeighbors = new List<Offset>
         {
-            new Offset(0, +1),
-            new Offset(+1, +1),
-            new Offset(+1, 0),
-            new Offset(0, -1),
-            new Offset(-1, 0),
-            new Offset(-1, +1),
+            new Offset(0, +1), new Offset(+1, +1), new Offset(+1, 0),
+            new Offset(0, -1), new Offset(-1, 0), new Offset(-1, +1),
         };
+
+        private static readonly List<Axial> _axialNeighbors = new List<Axial>
+        {
+            new Axial(+1, 0), new Axial(+1, -1), new Axial(0, -1),
+            new Axial(-1, 0), new Axial(-1, +1), new Axial(0, +1),
+        };
+
+        private static readonly List<Cubic> _cubicNeighbors = new List<Cubic>
+        {
+            new Cubic(+1, -1, 0), new Cubic(+1, 0, -1), new Cubic(0, +1, -1),
+            new Cubic(-1, +1, 0), new Cubic(-1, 0, +1), new Cubic(0, -1, +1),
+        };
+
+        #endregion
     }
 }

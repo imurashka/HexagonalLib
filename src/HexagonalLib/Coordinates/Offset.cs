@@ -3,7 +3,7 @@
 namespace HexagonalLib.Coordinates
 {
     [Serializable]
-    public readonly partial struct Offset
+    public readonly partial struct Offset : IEquatable<Offset>
     {
         public static Offset Zero => new Offset(0, 0);
 
@@ -65,20 +65,14 @@ namespace HexagonalLib.Coordinates
             return new Offset(coord.X * offset, coord.Y * offset);
         }
 
-        public override int GetHashCode()
-        {
-            return (X, Y).GetHashCode();
-        }
-
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(obj, null))
-            {
-                return false;
-            }
+            return obj is Offset other && Equals(other);
+        }
 
-            var other = (Offset) obj;
-            return (X, Y).Equals((other.X, other.Y));
+        public bool Equals(Offset other)
+        {
+            return (X, Y) == (other.X, other.Y);
         }
 
         private static int Clamp(int value, int min, int max)
@@ -93,6 +87,11 @@ namespace HexagonalLib.Coordinates
             }
 
             return value;
+        }
+
+        public override int GetHashCode()
+        {
+            return (X, Y).GetHashCode();
         }
 
         public override string ToString()
