@@ -6,23 +6,23 @@
     public enum HexagonalGridType : byte
     {
         /// <summary>
-        /// Vertical layout shoves odd columns down
-        /// </summary>
-        FlatOdd,
-
-        /// <summary>
-        /// Vertical layout shoves even columns down
-        /// </summary>
-        FlatEven,
-
-        /// <summary>
-        /// Horizontal layout shoves odd rows right
+        /// Horizontal layout shoves odd rows right [odd-r]
         /// </summary>
         PointyOdd,
 
         /// <summary>
-        /// Horizontal layout shoves even rows right
+        /// Horizontal layout shoves even rows right [even-r]
         /// </summary>
         PointyEven,
+
+        /// <summary>
+        /// Vertical layout shoves odd columns down [odd-q]
+        /// </summary>
+        FlatOdd,
+
+        /// <summary>
+        /// Vertical layout shoves even columns down [even-q]
+        /// </summary>
+        FlatEven,
     }
 }

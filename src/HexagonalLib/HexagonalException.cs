@@ -19,7 +19,7 @@ namespace HexagonalLib
             {
                 Append(nameof(grid.Type), grid.Type);
                 Append(nameof(grid.InscribedRadius), grid.InscribedRadius);
-                Append(nameof(grid.OutscribedRadius), grid.OutscribedRadius);
+                Append(nameof(grid.DescribedRadius), grid.DescribedRadius);
                 return this;
             }
 

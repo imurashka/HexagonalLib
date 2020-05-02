@@ -22,16 +22,24 @@ namespace HexagonalLib
         public readonly float InscribedRadius;
 
         /// <summary>
-        /// Outscribed radius of hex
+        /// Described radius of hex
         /// </summary>
-        public readonly float OutscribedRadius;
+        public readonly float DescribedRadius;
 
         /// <summary>
-        /// Edge length of hex
+        /// Edge length of each hex. Will be same as <see cref="DescribedRadius"/>
         /// </summary>
-        public float EdgeLength => OutscribedRadius;
+        public float Size => DescribedRadius;
 
+        /// <summary>
+        /// Inscribed diameter of hex
+        /// </summary>
         public float InscribedDiameter => InscribedRadius * 2;
+
+        /// <summary>
+        /// Described diameter of hex
+        /// </summary>
+        public float DescribedDiameter => DescribedRadius * 2;
 
         /// <summary>
         /// Orientation and layout of this grid
@@ -41,20 +49,20 @@ namespace HexagonalLib
         /// <summary>
         /// Offset between hex and its right-side neighbour on X axis
         /// </summary>
-        public float XOffset
+        public float HorizontalOffset
         {
             get
             {
                 switch (Type)
                 {
-                    case HexagonalGridType.FlatOdd:
-                    case HexagonalGridType.FlatEven:
-                        return EdgeLength * 1.5f;
                     case HexagonalGridType.PointyOdd:
                     case HexagonalGridType.PointyEven:
                         return InscribedRadius * 2.0f;
+                    case HexagonalGridType.FlatOdd:
+                    case HexagonalGridType.FlatEven:
+                        return DescribedRadius * 1.5f;
                     default:
-                        throw new HexagonalException($"Can't get {nameof(XOffset)} with unexpected {nameof(Type)}", this);
+                        throw new HexagonalException($"Can't get {nameof(HorizontalOffset)} with unexpected {nameof(Type)}", this);
                 }
             }
         }
@@ -62,20 +70,20 @@ namespace HexagonalLib
         /// <summary>
         /// Offset between hex and its up-side neighbour on Y axis
         /// </summary>
-        public float YOffset
+        public float VerticalOffset
         {
             get
             {
                 switch (Type)
                 {
+                    case HexagonalGridType.PointyOdd:
+                    case HexagonalGridType.PointyEven:
+                        return DescribedRadius * 1.5f;
                     case HexagonalGridType.FlatOdd:
                     case HexagonalGridType.FlatEven:
                         return InscribedRadius * 2.0f;
-                    case HexagonalGridType.PointyOdd:
-                    case HexagonalGridType.PointyEven:
-                        return EdgeLength * 1.5f;
                     default:
-                        throw new HexagonalException($"Can't get {nameof(YOffset)} with unexpected {nameof(Type)}", this);
+                        throw new HexagonalException($"Can't get {nameof(VerticalOffset)} with unexpected {nameof(Type)}", this);
                 }
             }
         }
@@ -90,12 +98,12 @@ namespace HexagonalLib
             {
                 switch (Type)
                 {
-                    case HexagonalGridType.FlatOdd:
-                    case HexagonalGridType.FlatEven:
-                        return 30.0f;
                     case HexagonalGridType.PointyOdd:
                     case HexagonalGridType.PointyEven:
                         return 0.0f;
+                    case HexagonalGridType.FlatOdd:
+                    case HexagonalGridType.FlatEven:
+                        return 30.0f;
                     default:
                         throw new HexagonalException($"Can't get {nameof(AngleToFirstNeighbor)} with unexpected {nameof(Type)}", this);
                 }
@@ -111,7 +119,7 @@ namespace HexagonalLib
         {
             Type = type;
             InscribedRadius = radius;
-            OutscribedRadius = (float) (radius / Math.Cos(Math.PI / EdgesCount));
+            DescribedRadius = (float) (radius / Math.Cos(Math.PI / EdgesCount));
         }
 
         #region ToOffset
@@ -123,18 +131,6 @@ namespace HexagonalLib
         {
             switch (Type)
             {
-                case HexagonalGridType.FlatOdd:
-                {
-                    var col = coord.X;
-                    var row = coord.Z + (coord.X - (coord.X & 1)) / 2;
-                    return new Offset(col, row);
-                }
-                case HexagonalGridType.FlatEven:
-                {
-                    var col = coord.X;
-                    var row = coord.Z + (coord.X + (coord.X & 1)) / 2;
-                    return new Offset(col, row);
-                }
                 case HexagonalGridType.PointyOdd:
                 {
                     var col = coord.X + (coord.Z - (coord.Z & 1)) / 2;
@@ -147,6 +143,18 @@ namespace HexagonalLib
                     var row = coord.Z;
                     return new Offset(col, row);
                 }
+                case HexagonalGridType.FlatOdd:
+                {
+                    var col = coord.X;
+                    var row = coord.Z + (coord.X - (coord.X & 1)) / 2;
+                    return new Offset(col, row);
+                }
+                case HexagonalGridType.FlatEven:
+                {
+                    var col = coord.X;
+                    var row = coord.Z + (coord.X + (coord.X & 1)) / 2;
+                    return new Offset(col, row);
+                }
                 default:
                     throw new HexagonalException($"{nameof(ToOffset)} failed with unexpected {nameof(Type)}", this, (nameof(coord), coord));
             }
@@ -157,7 +165,7 @@ namespace HexagonalLib
         /// </summary>
         public Offset ToOffset(Axial axial)
         {
-            return ToOffset(ToCube(axial));
+            return ToOffset(ToCubic(axial));
         }
 
         /// <summary>
@@ -171,9 +179,9 @@ namespace HexagonalLib
         /// <summary>
         /// Convert point to offset coordinate
         /// </summary>
-        public Offset ToOffset((float x, float y) point)
+        public Offset ToOffset((float X, float Y) point)
         {
-            return ToOffset(ToCubic(point.x, point.y));
+            return ToOffset(ToCubic(point.X, point.Y));
         }
 
         #endregion
@@ -193,15 +201,7 @@ namespace HexagonalLib
         /// </summary>
         public Axial ToAxial(Offset offset)
         {
-            return ToAxial(ToCube(offset));
-        }
-
-        /// <summary>
-        /// Convert point to axial coordinate
-        /// </summary>
-        public Axial ToAxial((float x, float y) point)
-        {
-            return ToAxial(ToCubic(point.x, point.y));
+            return ToAxial(ToCubic(offset));
         }
 
         /// <summary>
@@ -212,6 +212,14 @@ namespace HexagonalLib
             return ToAxial(ToCubic(x, y));
         }
 
+        /// <summary>
+        /// Convert point to axial coordinate
+        /// </summary>
+        public Axial ToAxial((float X, float Y) point)
+        {
+            return ToAxial(ToCubic(point.X, point.Y));
+        }
+
         #endregion
 
         #region ToCubic
@@ -219,24 +227,10 @@ namespace HexagonalLib
         /// <summary>
         /// Convert offset coordinate to cube
         /// </summary>
-        public Cubic ToCube(Offset coord)
+        public Cubic ToCubic(Offset coord)
         {
             switch (Type)
             {
-                case HexagonalGridType.FlatOdd:
-                {
-                    var x = coord.X;
-                    var z = coord.Y - (coord.X - (coord.X & 1)) / 2;
-                    var y = -x - z;
-                    return new Cubic(x, y, z);
-                }
-                case HexagonalGridType.FlatEven:
-                {
-                    var x = coord.X;
-                    var z = coord.Y - (coord.X + (coord.X & 1)) / 2;
-                    var y = -x - z;
-                    return new Cubic(x, y, z);
-                }
                 case HexagonalGridType.PointyOdd:
                 {
                     var x = coord.X - (coord.Y - (coord.Y & 1)) / 2;
@@ -251,25 +245,31 @@ namespace HexagonalLib
                     var y = -x - z;
                     return new Cubic(x, y, z);
                 }
+                case HexagonalGridType.FlatOdd:
+                {
+                    var x = coord.X;
+                    var z = coord.Y - (coord.X - (coord.X & 1)) / 2;
+                    var y = -x - z;
+                    return new Cubic(x, y, z);
+                }
+                case HexagonalGridType.FlatEven:
+                {
+                    var x = coord.X;
+                    var z = coord.Y - (coord.X + (coord.X & 1)) / 2;
+                    var y = -x - z;
+                    return new Cubic(x, y, z);
+                }
                 default:
-                    throw new HexagonalException($"{nameof(ToCube)} failed with unexpected {nameof(Type)}", this, (nameof(coord), coord));
+                    throw new HexagonalException($"{nameof(ToCubic)} failed with unexpected {nameof(Type)}", this, (nameof(coord), coord));
             }
         }
 
         /// <summary>
         /// Convert axial coordinate to cube
         /// </summary>
-        public Cubic ToCube(Axial axial)
+        public Cubic ToCubic(Axial axial)
         {
             return new Cubic(axial.Q, -axial.Q - axial.R, axial.R);
-        }
-
-        /// <summary>
-        /// Convert point to cubic coordinate
-        /// </summary>
-        public Cubic ToCubic((float x, float y) point)
-        {
-            return ToCubic(point.x, point.y);
         }
 
         /// <summary>
@@ -279,23 +279,31 @@ namespace HexagonalLib
         {
             switch (Type)
             {
-                case HexagonalGridType.FlatOdd:
-                case HexagonalGridType.FlatEven:
-                {
-                    var q = x * 2.0f / 3.0f / OutscribedRadius;
-                    var r = (-x / 3.0f + Sqrt3 / 3.0f * y) / OutscribedRadius;
-                    return new Cubic(q, -q - r, r);
-                }
                 case HexagonalGridType.PointyOdd:
                 case HexagonalGridType.PointyEven:
                 {
-                    var q = (x * Sqrt3 / 3.0f - y / 3.0f) / OutscribedRadius;
-                    var r = y * 2.0f / 3.0f / OutscribedRadius;
+                    var q = (x * Sqrt3 / 3.0f - y / 3.0f) / DescribedRadius;
+                    var r = y * 2.0f / 3.0f / DescribedRadius;
+                    return new Cubic(q, -q - r, r);
+                }
+                case HexagonalGridType.FlatOdd:
+                case HexagonalGridType.FlatEven:
+                {
+                    var q = x * 2.0f / 3.0f / DescribedRadius;
+                    var r = (-x / 3.0f + Sqrt3 / 3.0f * y) / DescribedRadius;
                     return new Cubic(q, -q - r, r);
                 }
                 default:
                     throw new HexagonalException($"{nameof(ToCubic)} failed with unexpected {nameof(Type)}", this, (nameof(x), x), (nameof(y), y));
             }
+        }
+
+        /// <summary>
+        /// Convert point to cubic coordinate
+        /// </summary>
+        public Cubic ToCubic((float X, float Y) point)
+        {
+            return ToCubic(point.X, point.Y);
         }
 
         #endregion
@@ -305,22 +313,22 @@ namespace HexagonalLib
         /// <summary>
         /// Convert hex based on its offset coordinate to it center position in 2d space
         /// </summary>
-        public (float x, float y) ToPoint2(Offset coord)
+        public (float X, float Y) ToPoint2(Offset coord)
         {
             switch (Type)
             {
-                case HexagonalGridType.FlatOdd:
-                case HexagonalGridType.FlatEven:
-                {
-                    float x = OutscribedRadius * 1.5f * coord.X;
-                    float y = InscribedDiameter * (coord.Y + 0.5f * (coord.X & 1));
-                    return (x, y);
-                }
                 case HexagonalGridType.PointyOdd:
                 case HexagonalGridType.PointyEven:
                 {
                     float x = InscribedDiameter * (coord.X - 0.5f * (coord.Y & 1));
-                    float y = OutscribedRadius * 1.5f * coord.Y;
+                    float y = DescribedRadius * 1.5f * coord.Y;
+                    return (x, y);
+                }
+                case HexagonalGridType.FlatOdd:
+                case HexagonalGridType.FlatEven:
+                {
+                    float x = DescribedRadius * 1.5f * coord.X;
+                    float y = InscribedDiameter * (coord.Y + 0.5f * (coord.X & 1));
                     return (x, y);
                 }
                 default:
@@ -331,22 +339,22 @@ namespace HexagonalLib
         /// <summary>
         /// Convert hex based on its axial coordinate to it center position in 2d space
         /// </summary>
-        public (float x, float y) ToPoint2(Axial coord)
+        public (float X, float Y) ToPoint2(Axial coord)
         {
             switch (Type)
             {
-                case HexagonalGridType.FlatOdd:
-                case HexagonalGridType.FlatEven:
-                {
-                    float x = OutscribedRadius * 1.5f * coord.Q;
-                    float y = InscribedDiameter * (coord.R + coord.Q * 0.5f);
-                    return (x, y);
-                }
                 case HexagonalGridType.PointyOdd:
                 case HexagonalGridType.PointyEven:
                 {
                     float x = InscribedDiameter * (coord.Q + coord.R * 0.5f);
-                    float y = OutscribedRadius * 1.5f * coord.R;
+                    float y = DescribedRadius * 1.5f * coord.R;
+                    return (x, y);
+                }
+                case HexagonalGridType.FlatOdd:
+                case HexagonalGridType.FlatEven:
+                {
+                    float x = DescribedRadius * 1.5f * coord.Q;
+                    float y = InscribedDiameter * (coord.R + coord.Q * 0.5f);
                     return (x, y);
                 }
                 default:
@@ -357,9 +365,57 @@ namespace HexagonalLib
         /// <summary>
         /// Convert hex based on its cubic coordinate to it center position in 2d space
         /// </summary>
-        public (float x, float y) ToPoint2(Cubic coord)
+        public (float X, float Y) ToPoint2(Cubic coord)
         {
             return ToPoint2(ToAxial(coord));
+        }
+
+        #endregion
+
+        #region GetCornerPoint
+
+        /// <summary>
+        /// Returns corner point in 2d space  of given coordinate
+        /// </summary>
+        public (float X, float Y) GetCornerPoint(Offset coord, int edge)
+        {
+            return GetCornerPoint(coord, edge, ToPoint2);
+        }
+
+        /// <summary>
+        /// Returns corner point in 2d space  of given coordinate
+        /// </summary>
+        public (float X, float Y) GetCornerPoint(Axial coord, int edge)
+        {
+            return GetCornerPoint(coord, edge, ToPoint2);
+        }
+
+        /// <summary>
+        /// Returns corner point in 2d space  of given coordinate
+        /// </summary>
+        public (float X, float Y) GetCornerPoint(Cubic coord, int edge)
+        {
+            return GetCornerPoint(coord, edge, ToPoint2);
+        }
+
+        /// <summary>
+        /// Returns corner point in 2d space  of given coordinate
+        /// </summary>
+        private (float X, float Y) GetCornerPoint<T>(T coord, int edge, Func<T, (float X, float Y)> toPoint)
+            where T : struct
+        {
+            edge = NormalizeIndex(edge);
+            var angleDeg = 60 * edge;
+            if (Type == HexagonalGridType.PointyEven || Type == HexagonalGridType.PointyOdd)
+            {
+                angleDeg -= 30;
+            }
+
+            var center = toPoint(coord);
+            var angleRad = Math.PI / 180 * angleDeg;
+            var x = (float) (center.X + DescribedRadius * Math.Cos(angleRad));
+            var y = (float) (center.Y + DescribedRadius * Math.Sin(angleRad));
+            return (x, y);
         }
 
         #endregion
@@ -371,7 +427,7 @@ namespace HexagonalLib
         /// </summary>
         public Offset GetNeighbor(Offset coord, int neighborIndex)
         {
-            return coord + GetNeighbor(neighborIndex, GetNeighborsOffsets(coord));
+            return coord + GetNeighborsOffsets(coord)[NormalizeIndex(neighborIndex)];
         }
 
         /// <summary>
@@ -379,7 +435,7 @@ namespace HexagonalLib
         /// </summary>
         public Axial GetNeighbor(Axial coord, int neighborIndex)
         {
-            return coord + GetNeighbor(neighborIndex, _axialNeighbors);
+            return coord + _axialNeighbors[NormalizeIndex(neighborIndex)];
         }
 
         /// <summary>
@@ -387,22 +443,7 @@ namespace HexagonalLib
         /// </summary>
         public Cubic GetNeighbor(Cubic coord, int neighborIndex)
         {
-            return coord + GetNeighbor(neighborIndex, _cubicNeighbors);
-        }
-
-        /// <summary>
-        /// Returns the neighbor at the specified index.
-        /// </summary>
-        private static T GetNeighbor<T>(int neighborIndex, IReadOnlyList<T> neighbors)
-        {
-            neighborIndex = neighborIndex % EdgesCount;
-            if (neighborIndex < 0)
-            {
-                neighborIndex += EdgesCount;
-            }
-
-            var dir = neighbors[neighborIndex];
-            return dir;
+            return coord + _cubicNeighbors[NormalizeIndex(neighborIndex)];
         }
 
         #endregion
@@ -476,7 +517,7 @@ namespace HexagonalLib
         public bool IsNeighbors<T>(T coord1, T coord2, Func<T, int, T> getNeighbor)
             where T : struct, IEquatable<T>
         {
-            for (var neighborIndex = 0; neighborIndex < EdgeLength; neighborIndex++)
+            for (var neighborIndex = 0; neighborIndex < Size; neighborIndex++)
             {
                 var neighbor = getNeighbor(coord1, neighborIndex);
                 if (neighbor.Equals(coord2))
@@ -520,6 +561,7 @@ namespace HexagonalLib
         /// Returns a ring with a radius of <see cref="radius"/> hexes around the given <see cref="center"/>.
         /// </summary>
         private static IEnumerable<T> GetNeighborsRing<T>(T center, int radius, Func<T, int, T> getNeighbor)
+            where T : struct
         {
             if (radius == 0)
             {
@@ -574,6 +616,7 @@ namespace HexagonalLib
         /// Returns a all hexes in the ring with a radius of <see cref="radius"/> hexes around the given <see cref="center"/>.
         /// </summary>
         private static IEnumerable<T> GetNeighborsAround<T>(T center, int radius, Func<T, int, IEnumerable<T>> getNeighborRing)
+            where T : struct
         {
             for (var i = 0; i < radius; i++)
             {
@@ -663,7 +706,8 @@ namespace HexagonalLib
         /// <summary>
         /// Returns the midpoint of the boundary segment of two neighbors
         /// </summary>
-        private (float x, float y) GetPointBetweenTwoNeighbours<T>(T coord1, T coord2, Func<T, T, bool> isNeighbor, Func<T, (float x, float y)> toPoint)
+        private (float x, float y) GetPointBetweenTwoNeighbours<T>(T coord1, T coord2, Func<T, T, bool> isNeighbor, Func<T, (float X, float Y)> toPoint)
+            where T : struct
         {
             if (!isNeighbor(coord1, coord2))
             {
@@ -673,7 +717,7 @@ namespace HexagonalLib
             var c1 = toPoint(coord1);
             var c2 = toPoint(coord2);
 
-            return ((c1.x + c2.x) / 2, (c1.y + c2.y) / 2);
+            return ((c1.X + c2.X) / 2, (c1.Y + c2.Y) / 2);
         }
 
         #endregion
@@ -685,8 +729,8 @@ namespace HexagonalLib
         /// </summary>
         public int CubeDistance(Offset h1, Offset h2)
         {
-            var cubicFrom = ToCube(h1);
-            var cubicTo = ToCube(h2);
+            var cubicFrom = ToCubic(h1);
+            var cubicTo = ToCubic(h2);
             return CubeDistance(cubicFrom, cubicTo);
         }
 
@@ -695,8 +739,8 @@ namespace HexagonalLib
         /// </summary>
         public int CubeDistance(Axial h1, Axial h2)
         {
-            var cubicFrom = ToCube(h1);
-            var cubicTo = ToCube(h2);
+            var cubicFrom = ToCubic(h1);
+            var cubicTo = ToCubic(h2);
             return CubeDistance(cubicFrom, cubicTo);
         }
 
@@ -719,14 +763,14 @@ namespace HexagonalLib
         {
             switch (Type)
             {
-                case HexagonalGridType.FlatOdd:
-                    return coord.X % 2 == 0 ? _flatOddNeighbors : _flatEvenNeighbors;
-                case HexagonalGridType.FlatEven:
-                    return coord.X % 2 == 1 ? _flatOddNeighbors : _flatEvenNeighbors;
                 case HexagonalGridType.PointyOdd:
-                    return coord.Y % 2 == 0 ? _pointyOddNeighbors : _pointyEvenNeighbors;
+                    return Math.Abs(coord.Y % 2) == 0 ? _pointyEvenNeighbors : _pointyOddNeighbors;
                 case HexagonalGridType.PointyEven:
-                    return coord.Y % 2 == 1 ? _pointyOddNeighbors : _pointyEvenNeighbors;
+                    return Math.Abs(coord.Y % 2) == 1 ? _pointyEvenNeighbors : _pointyOddNeighbors;
+                case HexagonalGridType.FlatOdd:
+                    return Math.Abs(coord.X % 2) == 0 ? _flatEvenNeighbors : _flatOddNeighbors;
+                case HexagonalGridType.FlatEven:
+                    return Math.Abs(coord.X % 2) == 1 ? _flatEvenNeighbors : _flatOddNeighbors;
                 default:
                     throw new HexagonalException($"{nameof(GetNeighborsOffsets)} failed with unexpected {nameof(Type)}", this, (nameof(coord), coord));
             }
@@ -734,26 +778,26 @@ namespace HexagonalLib
 
         private static readonly List<Offset> _pointyOddNeighbors = new List<Offset>
         {
-            new Offset(0, +1), new Offset(+1, 0), new Offset(0, -1),
-            new Offset(-1, -1), new Offset(-1, 0), new Offset(-1, +1),
+            new Offset(+1, 0), new Offset(+1, -1), new Offset(0, -1),
+            new Offset(-1, 0), new Offset(0, +1), new Offset(+1, +1),
         };
 
         private static readonly List<Offset> _pointyEvenNeighbors = new List<Offset>
         {
-            new Offset(+1, +1), new Offset(+1, 0), new Offset(+1, -1),
-            new Offset(0, -1), new Offset(-1, 0), new Offset(0, +1),
+            new Offset(+1, 0), new Offset(0, -1), new Offset(-1, -1),
+            new Offset(-1, 0), new Offset(-1, +1), new Offset(0, +1),
         };
 
         private static readonly List<Offset> _flatOddNeighbors = new List<Offset>
         {
-            new Offset(0, +1), new Offset(+1, 0), new Offset(+1, -1),
-            new Offset(0, -1), new Offset(-1, -1), new Offset(-1, 0),
+            new Offset(+1, +1), new Offset(+1, 0), new Offset(0, -1),
+            new Offset(-1, 0), new Offset(-1, +1), new Offset(0, +1),
         };
 
         private static readonly List<Offset> _flatEvenNeighbors = new List<Offset>
         {
-            new Offset(0, +1), new Offset(+1, +1), new Offset(+1, 0),
-            new Offset(0, -1), new Offset(-1, 0), new Offset(-1, +1),
+            new Offset(+1, 0), new Offset(+1, -1), new Offset(0, -1),
+            new Offset(-1, -1), new Offset(-1, 0), new Offset(0, +1),
         };
 
         private static readonly List<Axial> _axialNeighbors = new List<Axial>
@@ -769,5 +813,16 @@ namespace HexagonalLib
         };
 
         #endregion
+
+        private static int NormalizeIndex(int index)
+        {
+            index = index % EdgesCount;
+            if (index < 0)
+            {
+                index += EdgesCount;
+            }
+
+            return index;
+        }
     }
 }

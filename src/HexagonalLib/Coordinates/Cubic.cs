@@ -131,7 +131,7 @@ namespace HexagonalLib.Coordinates
 
         public override string ToString()
         {
-            return IsValid() ? "C-[Invalid]" : $"C-[{X}:{Y}:{Z}]";
+            return !IsValid() ? "C-[Invalid]" : $"C-[{X}:{Y}:{Z}]";
         }
     }
 }
