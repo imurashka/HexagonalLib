@@ -517,7 +517,7 @@ namespace HexagonalLib
         public bool IsNeighbors<T>(T coord1, T coord2, Func<T, int, T> getNeighbor)
             where T : struct, IEquatable<T>
         {
-            for (var neighborIndex = 0; neighborIndex < Size; neighborIndex++)
+            for (var neighborIndex = 0; neighborIndex < EdgesCount; neighborIndex++)
             {
                 var neighbor = getNeighbor(coord1, neighborIndex);
                 if (neighbor.Equals(coord2))

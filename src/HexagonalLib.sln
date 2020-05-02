@@ -4,6 +4,8 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "HexagonalLib", "HexagonalLi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HexagonalLib.Unity", "HexagonalLib.Unity\HexagonalLib.Unity.csproj", "{EE497232-AC7A-48D0-9059-53B152C6BF01}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HexagonalLib.Tests", "HexagonalLib.Tests\HexagonalLib.Tests.csproj", "{7A339BF7-EC2E-4070-8B26-CEBA7AF5BD5D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,5 +15,7 @@ Global
 		{30905D5D-8D2E-4A25-ABEB-B4B4B0C440E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE497232-AC7A-48D0-9059-53B152C6BF01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EE497232-AC7A-48D0-9059-53B152C6BF01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A339BF7-EC2E-4070-8B26-CEBA7AF5BD5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A339BF7-EC2E-4070-8B26-CEBA7AF5BD5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 EndGlobal
