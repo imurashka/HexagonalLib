@@ -27,9 +27,9 @@ namespace HexagonalLib
         public readonly float DescribedRadius;
 
         /// <summary>
-        /// Edge length of each hex. Will be same as <see cref="DescribedRadius"/>
+        /// Hexagon side length
         /// </summary>
-        public float Size => DescribedRadius;
+        public float SideLength => DescribedRadius;
 
         /// <summary>
         /// Inscribed diameter of hex

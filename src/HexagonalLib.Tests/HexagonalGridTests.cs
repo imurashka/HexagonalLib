@@ -22,7 +22,7 @@ namespace HexagonalLib.Tests
             Assert.AreEqual(grid.DescribedDiameter, DescribedRadius * 2);
             Assert.AreEqual(grid.HorizontalOffset, DescribedRadius * 1.5f);
             Assert.AreEqual(grid.VerticalOffset, InscribedRadius * 2.0f);
-            Assert.AreEqual(grid.Size, DescribedRadius);
+            Assert.AreEqual(grid.SideLength, DescribedRadius);
             Assert.AreEqual(grid.AngleToFirstNeighbor, 30.0f);
         }
 
@@ -38,7 +38,7 @@ namespace HexagonalLib.Tests
             Assert.AreEqual(grid.DescribedDiameter, DescribedRadius * 2);
             Assert.AreEqual(grid.HorizontalOffset, InscribedRadius * 2.0f);
             Assert.AreEqual(grid.VerticalOffset, DescribedRadius * 1.5f);
-            Assert.AreEqual(grid.Size, DescribedRadius);
+            Assert.AreEqual(grid.SideLength, DescribedRadius);
             Assert.AreEqual(grid.AngleToFirstNeighbor, 0.0f);
         }
 
