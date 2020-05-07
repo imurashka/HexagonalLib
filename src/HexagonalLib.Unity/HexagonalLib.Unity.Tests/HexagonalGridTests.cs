@@ -15,7 +15,7 @@ namespace HexagonalLib.Tests
             var grid = new HexagonalGrid(type, InscribedRadius);
             var offset = new Offset(offsetX, offsetY);
             var vector2 = grid.ToVector2(offset);
-            var vector3 = grid.ToVector2(offset);
+            var vector3 = grid.ToVector3(offset);
             Assert.AreEqual(offset, grid.ToOffset(vector2));
             Assert.AreEqual(offset, grid.ToOffset(vector3));
         }

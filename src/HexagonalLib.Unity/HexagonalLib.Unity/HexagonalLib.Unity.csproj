@@ -48,7 +48,6 @@
         <Compile Include="Coordinates\Cubic.cs" />
         <Compile Include="Coordinates\Offset.cs" />
         <Compile Include="HexagonalGrid.cs" />
-        <Compile Include="HexagonalMath.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="Utility\VectorUtility.cs" />
     </ItemGroup>

@@ -1,6 +1,6 @@
-﻿using System;
-using HexagonalLib.Coordinates;
+﻿using HexagonalLib.Coordinates;
 using NUnit.Framework;
+using static System.Math;
 
 namespace HexagonalLib.Tests
 {
@@ -8,7 +8,7 @@ namespace HexagonalLib.Tests
     public partial class HexagonalGridTests
     {
         private float InscribedRadius => 0.5f;
-        private float DescribedRadius => InscribedRadius / HexagonalMath.Cos(HexagonalMath.PI / HexagonalGrid.EdgesCount);
+        private float DescribedRadius => (float) (InscribedRadius / Cos(PI / HexagonalGrid.EdgesCount));
 
         [Test(Author = "Ivan Murashka", Description = "Check initial properties values for flat grids after creation")]
         [TestCase(HexagonalGridType.FlatEven)]

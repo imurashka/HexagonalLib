@@ -1,134 +1,48 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System;
 
 namespace HexagonalLib
 {
     public static partial class HexagonalMath
     {
         /// <summary>
-        /// The well-known 3.14159265358979... value
+        /// Degrees-to-radians conversion constant (Read Only)
         /// </summary>
-        public static float PI
-        {
-            get
-            {
-                var pi = default(float);
-                GetPI(ref pi);
-                return pi;
-            }
-        }
+        public static readonly double Deg2Rad = Math.PI / 180.0;
 
         /// <summary>
-        /// Returns the sine of the specified angle
+        /// Radians-to-degrees conversion constant (Read Only)
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float Sqrt(in float value)
-        {
-            var result = default(float);
-            Sqrt(value, ref result);
-            return result;
-        }
-
-        /// <summary>
-        /// Returns the absolute value of value.
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float Abs(in float value)
-        {
-            var result = default(float);
-            Abs(value, ref result);
-            return result;
-        }
-
-        /// <summary>
-        /// Returns the absolute value of value.
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Abs(in int value)
-        {
-            var result = default(int);
-            Abs(value, ref result);
-            return result;
-        }
-
-        /// <summary>
-        /// Returns the sine of the specified angle
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float Sin(in float radians)
-        {
-            var sin = default(float);
-            Sin(radians, ref sin);
-            return sin;
-        }
-
-        /// <summary>
-        /// Returns the cosine of the specified angle
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float Cos(in float radians)
-        {
-            var cos = default(float);
-            Cos(radians, ref cos);
-            return cos;
-        }
-
-        /// <summary>
-        /// Degrees to radians conversion
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float Deg2Rad(in float degrees)
-        {
-            var radians = default(float);
-            Deg2Rad(degrees, ref radians);
-            return radians;
-        }
-
-        /// <summary>
-        /// Radians to degrees conversion 
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float Rad2Deg(in float radians)
-        {
-            var degrees = default(float);
-            Rad2Deg(radians, ref degrees);
-            return degrees;
-        }
+        public static readonly double Rad2Deg = 180.0 / Math.PI;
 
         /// <summary>
         /// Rotate 2d vector around z Axis clockwise
         /// </summary>
         /// <param name="vector">Vector to rotate</param>
         /// <param name="degrees">Angle of rotation</param>
-        /// <returns>Rotated vector</returns>
-        public static (float X, float Y) Rotate(this (float X, float Y) vector, float degrees)
+        public static (float X, float Y) Rotate(this in (float X, float Y) vector, float degrees)
         {
-            var sin = Sin(Deg2Rad(degrees));
-            var cos = Cos(Deg2Rad(degrees));
-            return (cos * vector.X - sin * vector.Y, sin * vector.X + cos * vector.Y);
+            var sin = Math.Sin(Deg2Rad * degrees);
+            var cos = Math.Cos(Deg2Rad * degrees);
+            var x = (float) Math.Round(cos * vector.X - sin * vector.Y, 7);
+            var y = (float) Math.Round(sin * vector.X + cos * vector.Y, 7);
+            return (-x, y);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static partial void Sqrt(in float value, ref float result);
+        /// <summary>
+        /// Returns this vector with a magnitude of 1
+        /// </summary>
+        public static (float X, float Y) Normalize(this in (float X, float Y) vector)
+        {
+            var distance = Math.Sqrt(vector.X * vector.X + vector.Y * vector.Y);
+            return ((float) (vector.X / distance), (float) (vector.Y / distance));
+        }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static partial void Abs(in float value, ref float result);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static partial void Abs(in int value, ref int result);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static partial void GetPI(ref float pi);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static partial void Sin(in float radians, ref float sin);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static partial void Cos(in float radians, ref float cos);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static partial void Deg2Rad(in float degrees, ref float radians);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static partial void Rad2Deg(in float radians, ref float degrees);
+        /// <summary>
+        /// Compares two floating point values and returns true if they are similar.
+        /// </summary>
+        public static bool Approximately(this in float a, float b)
+        {
+            return Math.Abs(b - a) < (double) Math.Max(1E-06f * Math.Max(Math.Abs(a), Math.Abs(b)), float.Epsilon * 8f);
+        }
     }
 }

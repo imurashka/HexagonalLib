@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using HexagonalLib.Coordinates;
+using static System.Math;
 
 namespace HexagonalLib
 {
@@ -14,7 +15,7 @@ namespace HexagonalLib
         /// </summary>
         public const int EdgesCount = 6;
 
-        public static float Sqrt3 { get; } = HexagonalMath.Sqrt(3);
+        public static readonly float Sqrt3 = (float) Sqrt(3);
 
         /// <summary>
         /// Inscribed radius of the hex
@@ -119,7 +120,7 @@ namespace HexagonalLib
         {
             Type = type;
             InscribedRadius = radius;
-            DescribedRadius = radius / HexagonalMath.Cos(HexagonalMath.PI / EdgesCount);
+            DescribedRadius = (float) (radius / Cos(PI / EdgesCount));
         }
 
         #region ToOffset
@@ -412,9 +413,9 @@ namespace HexagonalLib
             }
 
             var center = toPoint(coord);
-            var angleRad = HexagonalMath.PI / 180 * angleDeg;
-            var x = (float) (center.X + DescribedRadius * HexagonalMath.Cos(angleRad));
-            var y = (float) (center.Y + DescribedRadius * HexagonalMath.Sin(angleRad));
+            var angleRad = PI / 180 * angleDeg;
+            var x = (float) (center.X + DescribedRadius * Cos(angleRad));
+            var y = (float) (center.Y + DescribedRadius * Sin(angleRad));
             return (x, y);
         }
 
@@ -750,7 +751,7 @@ namespace HexagonalLib
         /// </summary>
         public static int CubeDistance(Cubic h1, Cubic h2)
         {
-            return (HexagonalMath.Abs(h1.X - h2.X) + HexagonalMath.Abs(h1.Y - h2.Y) + HexagonalMath.Abs(h1.Z - h2.Z)) / 2;
+            return (Abs(h1.X - h2.X) + Abs(h1.Y - h2.Y) + Abs(h1.Z - h2.Z)) / 2;
         }
 
         #endregion
@@ -765,13 +766,13 @@ namespace HexagonalLib
             switch (Type)
             {
                 case HexagonalGridType.PointyOdd:
-                    return HexagonalMath.Abs(coord.Y % 2) == 0 ? _pointyEvenNeighbors : _pointyOddNeighbors;
+                    return Abs(coord.Y % 2) == 0 ? _pointyEvenNeighbors : _pointyOddNeighbors;
                 case HexagonalGridType.PointyEven:
-                    return HexagonalMath.Abs(coord.Y % 2) == 1 ? _pointyEvenNeighbors : _pointyOddNeighbors;
+                    return Abs(coord.Y % 2) == 1 ? _pointyEvenNeighbors : _pointyOddNeighbors;
                 case HexagonalGridType.FlatOdd:
-                    return HexagonalMath.Abs(coord.X % 2) == 0 ? _flatEvenNeighbors : _flatOddNeighbors;
+                    return Abs(coord.X % 2) == 0 ? _flatEvenNeighbors : _flatOddNeighbors;
                 case HexagonalGridType.FlatEven:
-                    return HexagonalMath.Abs(coord.X % 2) == 1 ? _flatEvenNeighbors : _flatOddNeighbors;
+                    return Abs(coord.X % 2) == 1 ? _flatEvenNeighbors : _flatOddNeighbors;
                 default:
                     throw new HexagonalException($"{nameof(GetNeighborsOffsets)} failed with unexpected {nameof(Type)}", this, (nameof(coord), coord));
             }
