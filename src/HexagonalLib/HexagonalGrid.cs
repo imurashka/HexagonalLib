@@ -14,7 +14,7 @@ namespace HexagonalLib
         /// </summary>
         public const int EdgesCount = 6;
 
-        public static float Sqrt3 { get; } = (float) Math.Sqrt(3);
+        public static float Sqrt3 { get; } = HexagonalMath.Sqrt(3);
 
         /// <summary>
         /// Inscribed radius of the hex
@@ -119,7 +119,7 @@ namespace HexagonalLib
         {
             Type = type;
             InscribedRadius = radius;
-            DescribedRadius = (float) (radius / Math.Cos(Math.PI / EdgesCount));
+            DescribedRadius = radius / HexagonalMath.Cos(HexagonalMath.PI / EdgesCount);
         }
 
         #region ToOffset
@@ -412,9 +412,9 @@ namespace HexagonalLib
             }
 
             var center = toPoint(coord);
-            var angleRad = Math.PI / 180 * angleDeg;
-            var x = (float) (center.X + DescribedRadius * Math.Cos(angleRad));
-            var y = (float) (center.Y + DescribedRadius * Math.Sin(angleRad));
+            var angleRad = HexagonalMath.PI / 180 * angleDeg;
+            var x = (float) (center.X + DescribedRadius * HexagonalMath.Cos(angleRad));
+            var y = (float) (center.Y + DescribedRadius * HexagonalMath.Sin(angleRad));
             return (x, y);
         }
 
@@ -500,7 +500,8 @@ namespace HexagonalLib
         /// </summary>
         public bool IsNeighbors(Axial coord1, Axial coord2)
         {
-            return IsNeighbors(coord1, coord2, GetNeighbor);
+            Func<Axial, int, Axial> getNeighbor = GetNeighbor;
+            return IsNeighbors(coord1, coord2, getNeighbor);
         }
 
         /// <summary>
@@ -514,8 +515,8 @@ namespace HexagonalLib
         /// <summary>
         /// Checks whether the two hexes are neighbors or no
         /// </summary>
-        public bool IsNeighbors<T>(T coord1, T coord2, Func<T, int, T> getNeighbor)
-            where T : struct, IEquatable<T>
+        public bool IsNeighbors<T>(T coord1, T coord2, in Func<T, int, T> getNeighbor)
+            where T : struct, IEqualityComparer<T>
         {
             for (var neighborIndex = 0; neighborIndex < EdgesCount; neighborIndex++)
             {
@@ -659,7 +660,7 @@ namespace HexagonalLib
         /// Returns the bypass index to the specified neighbor
         /// </summary>
         private byte GetNeighborIndex<T>(T center, T neighbor, Func<T, IEnumerable<T>> getNeighbors)
-            where T : struct, IEquatable<T>
+            where T : struct, IEqualityComparer<T>
         {
             byte neighborIndex = 0;
             foreach (var current in getNeighbors(center))
@@ -749,7 +750,7 @@ namespace HexagonalLib
         /// </summary>
         public static int CubeDistance(Cubic h1, Cubic h2)
         {
-            return (Math.Abs(h1.X - h2.X) + Math.Abs(h1.Y - h2.Y) + Math.Abs(h1.Z - h2.Z)) / 2;
+            return (HexagonalMath.Abs(h1.X - h2.X) + HexagonalMath.Abs(h1.Y - h2.Y) + HexagonalMath.Abs(h1.Z - h2.Z)) / 2;
         }
 
         #endregion
@@ -764,13 +765,13 @@ namespace HexagonalLib
             switch (Type)
             {
                 case HexagonalGridType.PointyOdd:
-                    return Math.Abs(coord.Y % 2) == 0 ? _pointyEvenNeighbors : _pointyOddNeighbors;
+                    return HexagonalMath.Abs(coord.Y % 2) == 0 ? _pointyEvenNeighbors : _pointyOddNeighbors;
                 case HexagonalGridType.PointyEven:
-                    return Math.Abs(coord.Y % 2) == 1 ? _pointyEvenNeighbors : _pointyOddNeighbors;
+                    return HexagonalMath.Abs(coord.Y % 2) == 1 ? _pointyEvenNeighbors : _pointyOddNeighbors;
                 case HexagonalGridType.FlatOdd:
-                    return Math.Abs(coord.X % 2) == 0 ? _flatEvenNeighbors : _flatOddNeighbors;
+                    return HexagonalMath.Abs(coord.X % 2) == 0 ? _flatEvenNeighbors : _flatOddNeighbors;
                 case HexagonalGridType.FlatEven:
-                    return Math.Abs(coord.X % 2) == 1 ? _flatEvenNeighbors : _flatOddNeighbors;
+                    return HexagonalMath.Abs(coord.X % 2) == 1 ? _flatEvenNeighbors : _flatOddNeighbors;
                 default:
                     throw new HexagonalException($"{nameof(GetNeighborsOffsets)} failed with unexpected {nameof(Type)}", this, (nameof(coord), coord));
             }

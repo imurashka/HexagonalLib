@@ -5,10 +5,10 @@ using NUnit.Framework;
 namespace HexagonalLib.Tests
 {
     [TestFixture(TestOf = typeof(HexagonalGrid))]
-    public class HexagonalGridTests
+    public partial class HexagonalGridTests
     {
         private float InscribedRadius => 0.5f;
-        private float DescribedRadius => (float) (InscribedRadius / Math.Cos(Math.PI / HexagonalGrid.EdgesCount));
+        private float DescribedRadius => InscribedRadius / HexagonalMath.Cos(HexagonalMath.PI / HexagonalGrid.EdgesCount);
 
         [Test(Author = "Ivan Murashka", Description = "Check initial properties values for flat grids after creation")]
         [TestCase(HexagonalGridType.FlatEven)]

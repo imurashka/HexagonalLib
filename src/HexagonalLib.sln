@@ -2,20 +2,37 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "HexagonalLib", "HexagonalLib\HexagonalLib.shproj", "{30905D5D-8D2E-4A25-ABEB-B4B4B0C440E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HexagonalLib.Unity", "HexagonalLib.Unity\HexagonalLib.Unity.csproj", "{EE497232-AC7A-48D0-9059-53B152C6BF01}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "HexagonalLib.Tests", "HexagonalLib.Tests\HexagonalLib.Tests.shproj", "{EFA80546-F632-4AAB-A785-DCDC988178B6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HexagonalLib.Tests", "HexagonalLib.Tests\HexagonalLib.Tests.csproj", "{7A339BF7-EC2E-4070-8B26-CEBA7AF5BD5D}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "HexagonalLib.Unity", "HexagonalLib.Unity", "{C02A807F-4B02-4900-895F-67E25F8CF774}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HexagonalLib.Unity.Tests", "HexagonalLib.Unity\HexagonalLib.Unity.Tests\HexagonalLib.Unity.Tests.csproj", "{1E807875-014C-4745-86AB-E1E35916F8B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HexagonalLib.Unity", "HexagonalLib.Unity\HexagonalLib.Unity\HexagonalLib.Unity.csproj", "{EE497232-AC7A-48D0-9059-53B152C6BF01}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Release|Any CPU = Release|Any CPU
 		Debug|Any CPU = Debug|Any CPU
 	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{30905D5D-8D2E-4A25-ABEB-B4B4B0C440E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{30905D5D-8D2E-4A25-ABEB-B4B4B0C440E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{30905D5D-8D2E-4A25-ABEB-B4B4B0C440E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFA80546-F632-4AAB-A785-DCDC988178B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFA80546-F632-4AAB-A785-DCDC988178B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE497232-AC7A-48D0-9059-53B152C6BF01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE497232-AC7A-48D0-9059-53B152C6BF01}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EE497232-AC7A-48D0-9059-53B152C6BF01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EE497232-AC7A-48D0-9059-53B152C6BF01}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7A339BF7-EC2E-4070-8B26-CEBA7AF5BD5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7A339BF7-EC2E-4070-8B26-CEBA7AF5BD5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E807875-014C-4745-86AB-E1E35916F8B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E807875-014C-4745-86AB-E1E35916F8B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E807875-014C-4745-86AB-E1E35916F8B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E807875-014C-4745-86AB-E1E35916F8B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1E807875-014C-4745-86AB-E1E35916F8B3} = {C02A807F-4B02-4900-895F-67E25F8CF774}
+		{EE497232-AC7A-48D0-9059-53B152C6BF01} = {C02A807F-4B02-4900-895F-67E25F8CF774}
 	EndGlobalSection
 EndGlobal

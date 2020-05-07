@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace HexagonalLib.Coordinates
 {
     [Serializable]
-    public readonly partial struct Axial : IEquatable<Axial>
+    public readonly partial struct Axial : IEquatable<Axial>, IEqualityComparer<Axial>
     {
         public static Axial Zero => new Axial(0, 0);
 
@@ -52,19 +53,29 @@ namespace HexagonalLib.Coordinates
             return new Axial(coord.Q * offset, coord.R * offset);
         }
 
-        public bool Equals(Axial other)
-        {
-            return (Q, R) == (other.Q, other.R);
-        }
-
         public override bool Equals(object other)
         {
             return other is Axial axial && Equals(axial);
         }
 
+        public bool Equals(Axial other)
+        {
+            return (Q, R) == (other.Q, other.R);
+        }
+
+        public bool Equals(Axial coord1, Axial coord2)
+        {
+            return coord1.Equals(coord2);
+        }
+
         public override int GetHashCode()
         {
             return (Q, R).GetHashCode();
+        }
+
+        public int GetHashCode(Axial axial)
+        {
+            return axial.GetHashCode();
         }
 
         public override string ToString()

@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace HexagonalLib.Coordinates
 {
     [Serializable]
-    public readonly partial struct Cubic : IEquatable<Cubic>
+    public readonly partial struct Cubic : IEquatable<Cubic>, IEqualityComparer<Cubic>
     {
         public static Cubic Zero => new Cubic(0, 0, 0);
 
@@ -124,9 +125,19 @@ namespace HexagonalLib.Coordinates
             return (X, Y, Z) == (other.X, other.Y, other.Z);
         }
 
+        public bool Equals(Cubic coord1, Cubic coord2)
+        {
+            return coord1.Equals(coord2);
+        }
+
         public override int GetHashCode()
         {
             return (X, Y, Z).GetHashCode();
+        }
+
+        public int GetHashCode(Cubic coord)
+        {
+            return coord.GetHashCode();
         }
 
         public override string ToString()

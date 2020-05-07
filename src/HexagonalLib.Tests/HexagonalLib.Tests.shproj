@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup Label="Globals">
-        <ProjectGuid>{30905D5D-8D2E-4A25-ABEB-B4B4B0C440E6}</ProjectGuid>
+        <ProjectGuid>{EFA80546-F632-4AAB-A785-DCDC988178B6}</ProjectGuid>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
       <OutputPath>bin\Debug\</OutputPath>
@@ -9,9 +9,10 @@
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
       <OutputPath>bin\Release\</OutputPath>
     </PropertyGroup>
+    <Import Project="..\HexagonalLib\HexagonalLib.projitems" Label="Shared" />
     <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
     <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\CodeSharing\Microsoft.CodeSharing.Common.Default.props" />
     <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\CodeSharing\Microsoft.CodeSharing.Common.props" />
-    <Import Project="HexagonalLib.projitems" Label="Shared" />
+    <Import Project="HexagonalLib.Tests.projitems" Label="Shared" />
     <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\CodeSharing\Microsoft.CodeSharing.CSharp.targets" />
 </Project>

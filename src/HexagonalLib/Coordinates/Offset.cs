@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace HexagonalLib.Coordinates
 {
     [Serializable]
-    public readonly partial struct Offset : IEquatable<Offset>
+    public readonly partial struct Offset : IEquatable<Offset>, IEqualityComparer<Offset>
     {
         public static Offset Zero => new Offset(0, 0);
 
@@ -28,6 +29,20 @@ namespace HexagonalLib.Coordinates
             var y = Clamp(coord.Y, min.Y, max.Y);
 
             return new Offset(x, y);
+        }
+
+        private static int Clamp(int value, int min, int max)
+        {
+            if (value < min)
+            {
+                value = min;
+            }
+            else if (value > max)
+            {
+                value = max;
+            }
+
+            return value;
         }
 
         public static bool operator ==(Offset coord1, Offset coord2)
@@ -75,23 +90,19 @@ namespace HexagonalLib.Coordinates
             return (X, Y) == (other.X, other.Y);
         }
 
-        private static int Clamp(int value, int min, int max)
+        public bool Equals(Offset coord1, Offset coord2)
         {
-            if (value < min)
-            {
-                value = min;
-            }
-            else if (value > max)
-            {
-                value = max;
-            }
-
-            return value;
+            return coord1.Equals(coord2);
         }
 
         public override int GetHashCode()
         {
             return (X, Y).GetHashCode();
+        }
+
+        public int GetHashCode(Offset coord)
+        {
+            return coord.GetHashCode();
         }
 
         public override string ToString()

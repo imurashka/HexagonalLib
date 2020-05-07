@@ -2,7 +2,7 @@
 
 namespace HexagonalLib.Utility
 {
-    public static class VectorUtility
+    internal static class VectorUtility
     {
         internal static (float x, float y) AsTuple(this Vector2 vector)
         {

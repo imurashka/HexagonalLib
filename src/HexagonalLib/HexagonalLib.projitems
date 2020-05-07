@@ -15,5 +15,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)HexagonalException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HexagonalGrid.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HexagonalGridType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)HexagonalMath.cs" />
   </ItemGroup>
 </Project>
