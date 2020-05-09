@@ -30,7 +30,7 @@ namespace HexagonalLib
         /// <summary>
         /// Hexagon side length
         /// </summary>
-        public float SideLength => DescribedRadius;
+        public float Side => DescribedRadius;
 
         /// <summary>
         /// Inscribed diameter of hex
@@ -283,15 +283,15 @@ namespace HexagonalLib
                 case HexagonalGridType.PointyOdd:
                 case HexagonalGridType.PointyEven:
                 {
-                    var q = (x * Sqrt3 / 3.0f - y / 3.0f) / DescribedRadius;
-                    var r = y * 2.0f / 3.0f / DescribedRadius;
+                    var q = (x * Sqrt3 / 3.0f - y / 3.0f) / Side;
+                    var r = y * 2.0f / 3.0f / Side;
                     return new Cubic(q, -q - r, r);
                 }
                 case HexagonalGridType.FlatOdd:
                 case HexagonalGridType.FlatEven:
                 {
-                    var q = x * 2.0f / 3.0f / DescribedRadius;
-                    var r = (-x / 3.0f + Sqrt3 / 3.0f * y) / DescribedRadius;
+                    var q = x * 2.0f / 3.0f / Side;
+                    var r = (-x / 3.0f + Sqrt3 / 3.0f * y) / Side;
                     return new Cubic(q, -q - r, r);
                 }
                 default:
@@ -319,17 +319,27 @@ namespace HexagonalLib
             switch (Type)
             {
                 case HexagonalGridType.PointyOdd:
+                {
+                    var x = Side * Sqrt3 * (coord.X + 0.5f * (coord.Y & 1));
+                    var y = Side * 3.0f / 2.0f * coord.Y;
+                    return (x, y);
+                }
                 case HexagonalGridType.PointyEven:
                 {
-                    float x = InscribedDiameter * (coord.X - 0.5f * (coord.Y & 1));
-                    float y = DescribedRadius * 1.5f * coord.Y;
+                    var x = Side * Sqrt3 * (coord.X - 0.5f * (coord.Y & 1));
+                    var y = Side * 3.0f / 2.0f * coord.Y;
                     return (x, y);
                 }
                 case HexagonalGridType.FlatOdd:
+                {
+                    var x = Side * 3.0f / 2.0f * coord.Y;
+                    var y = Side * Sqrt3 * (coord.X + 0.5f * (coord.Y & 1));
+                    return (x, y);
+                }
                 case HexagonalGridType.FlatEven:
                 {
-                    float x = DescribedRadius * 1.5f * coord.X;
-                    float y = InscribedDiameter * (coord.Y + 0.5f * (coord.X & 1));
+                    var x = Side * 3.0f / 2.0f * coord.Y;
+                    var y = Side * Sqrt3 * (coord.X - 0.5f * (coord.Y & 1));
                     return (x, y);
                 }
                 default:
@@ -347,15 +357,15 @@ namespace HexagonalLib
                 case HexagonalGridType.PointyOdd:
                 case HexagonalGridType.PointyEven:
                 {
-                    float x = InscribedDiameter * (coord.Q + coord.R * 0.5f);
-                    float y = DescribedRadius * 1.5f * coord.R;
+                    var x = Side * (Sqrt3 * coord.Q + Sqrt3 / 2 * coord.R);
+                    var y = Side * (3.0f / 2.0f * coord.R);
                     return (x, y);
                 }
                 case HexagonalGridType.FlatOdd:
                 case HexagonalGridType.FlatEven:
                 {
-                    float x = DescribedRadius * 1.5f * coord.Q;
-                    float y = InscribedDiameter * (coord.R + coord.Q * 0.5f);
+                    var x = Side * (3.0f / 2.0f * coord.Q);
+                    var y = Side * (Sqrt3 / 2 * coord.Q + Sqrt3 * coord.R);
                     return (x, y);
                 }
                 default:

@@ -22,7 +22,7 @@ namespace HexagonalLib.Tests
             Assert.AreEqual(grid.DescribedDiameter, DescribedRadius * 2);
             Assert.AreEqual(grid.HorizontalOffset, DescribedRadius * 1.5f);
             Assert.AreEqual(grid.VerticalOffset, InscribedRadius * 2.0f);
-            Assert.AreEqual(grid.SideLength, DescribedRadius);
+            Assert.AreEqual(grid.Side, DescribedRadius);
             Assert.AreEqual(grid.AngleToFirstNeighbor, 30.0f);
         }
 
@@ -38,7 +38,7 @@ namespace HexagonalLib.Tests
             Assert.AreEqual(grid.DescribedDiameter, DescribedRadius * 2);
             Assert.AreEqual(grid.HorizontalOffset, InscribedRadius * 2.0f);
             Assert.AreEqual(grid.VerticalOffset, DescribedRadius * 1.5f);
-            Assert.AreEqual(grid.SideLength, DescribedRadius);
+            Assert.AreEqual(grid.Side, DescribedRadius);
             Assert.AreEqual(grid.AngleToFirstNeighbor, 0.0f);
         }
 
@@ -52,7 +52,26 @@ namespace HexagonalLib.Tests
             var offset = new Offset(offsetX, offsetY);
             var axial = grid.ToAxial(offset);
             var cubic = grid.ToCubic(offset);
-            Assert.IsTrue(cubic.IsValid());
+            Assert.IsTrue(cubic.IsValid(), $"Invalid cubic coordinate: {cubic.X}-{cubic.Y}-{cubic.Z}");
+            Assert.AreEqual(offset, grid.ToOffset(axial));
+            Assert.AreEqual(offset, grid.ToOffset(cubic));
+            Assert.AreEqual(axial, grid.ToAxial(offset));
+            Assert.AreEqual(axial, grid.ToAxial(cubic));
+            Assert.AreEqual(cubic, grid.ToCubic(offset));
+            Assert.AreEqual(cubic, grid.ToCubic(axial));
+        }
+
+        [Test(Author = "Ivan Murashka", Description = "Check conversion to Point2 from Offset")]
+        public void PointConversionTest(
+            [Values] HexagonalGridType type,
+            [Values(-13, -8, 0, 15, 22)] int offsetX,
+            [Values(-13, -8, 0, 15, 22)] int offsetY)
+        {
+            var grid = new HexagonalGrid(type, InscribedRadius);
+            var offset = new Offset(offsetX, offsetY);
+            var axial = grid.ToAxial(offset);
+            var cubic = grid.ToCubic(offset);
+            Assert.IsTrue(cubic.IsValid(), $"Invalid cubic coordinate: {cubic.X}-{cubic.Y}-{cubic.Z}");
             Assert.AreEqual(offset, grid.ToOffset(axial));
             Assert.AreEqual(offset, grid.ToOffset(cubic));
             Assert.AreEqual(axial, grid.ToAxial(offset));
@@ -72,11 +91,13 @@ namespace HexagonalLib.Tests
             var offset = new Offset(offsetX, offsetY);
             var axial = grid.ToAxial(offset);
             var cubic = grid.ToCubic(offset);
+            Assert.IsTrue(cubic.IsValid(), $"Invalid cubic coordinate: {cubic.X}-{cubic.Y}-{cubic.Z}");
 
             var oNeighbor = grid.GetNeighbor(offset, neighborIndex);
             var aNeighbor = grid.GetNeighbor(axial, neighborIndex);
             var cNeighbor = grid.GetNeighbor(cubic, neighborIndex);
 
+            Assert.IsTrue(cNeighbor.IsValid(), $"Invalid cubic coordinate: {cNeighbor.X}-{cNeighbor.Y}-{cNeighbor.Z}");
             Assert.IsTrue(grid.IsNeighbors(offset, oNeighbor), $"Neighbor1={offset}; Neighbor2={oNeighbor}; Index={neighborIndex};");
             Assert.IsTrue(grid.IsNeighbors(axial, aNeighbor), $"Neighbor1={axial}; Neighbor2={aNeighbor}; Index={neighborIndex};");
             Assert.IsTrue(grid.IsNeighbors(cubic, cNeighbor), $"Neighbor1={cubic}; Neighbor2={cNeighbor}; Index={neighborIndex};");
@@ -97,6 +118,8 @@ namespace HexagonalLib.Tests
             var oNeighbor = grid.GetNeighbor(offset, neighborIndex);
             var aNeighbor = grid.GetNeighbor(axial, neighborIndex);
             var cNeighbor = grid.GetNeighbor(cubic, neighborIndex);
+
+            Assert.IsTrue(cNeighbor.IsValid(), $"Invalid cubic coordinate: {cNeighbor.X}-{cNeighbor.Y}-{cNeighbor.Z}");
 
             var fromAxial = grid.ToOffset(aNeighbor);
             var fromCubic = grid.ToOffset(cNeighbor);
