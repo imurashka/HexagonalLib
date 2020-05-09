@@ -31,9 +31,17 @@ namespace HexagonalLib
         /// <summary>
         /// Compares two floating point values and returns true if they are similar.
         /// </summary>
-        public static bool Approximately(this in float a, float b)
+        public static bool SimilarTo(this in float a, in float b)
         {
             return Math.Abs(b - a) < (double) Math.Max(1E-06f * Math.Max(Math.Abs(a), Math.Abs(b)), float.Epsilon * 8f);
+        }
+
+        /// <summary>
+        /// Compares two vectors and returns true if they are similar.
+        /// </summary>
+        public static bool SimilarTo(this in (float X, float Y) a, in (float X, float Y)  b)
+        {
+            return a.X.SimilarTo(b.X) && a.Y.SimilarTo(b.Y);
         }
     }
 }

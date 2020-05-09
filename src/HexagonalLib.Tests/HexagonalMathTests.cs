@@ -19,7 +19,7 @@ namespace HexagonalLib.Tests
         {
             var vector = (x, y).Rotate(degrees);
             var result = (resultX, resultY).Normalize();
-            Assert.IsTrue(vector.X.Approximately(result.X) && vector.Y.Approximately(result.Y), $"Expected: {result.X}:{result.Y}; Actual: {vector.X}:{vector.Y}");
+            Assert.IsTrue(vector.SimilarTo(result), $"Expected: {result.X}:{result.Y}; Actual: {vector.X}:{vector.Y}");
         }
     }
 }

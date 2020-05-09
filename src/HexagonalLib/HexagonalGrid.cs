@@ -316,35 +316,7 @@ namespace HexagonalLib
         /// </summary>
         public (float X, float Y) ToPoint2(Offset coord)
         {
-            switch (Type)
-            {
-                case HexagonalGridType.PointyOdd:
-                {
-                    var x = Side * Sqrt3 * (coord.X + 0.5f * (coord.Y & 1));
-                    var y = Side * 3.0f / 2.0f * coord.Y;
-                    return (x, y);
-                }
-                case HexagonalGridType.PointyEven:
-                {
-                    var x = Side * Sqrt3 * (coord.X - 0.5f * (coord.Y & 1));
-                    var y = Side * 3.0f / 2.0f * coord.Y;
-                    return (x, y);
-                }
-                case HexagonalGridType.FlatOdd:
-                {
-                    var x = Side * 3.0f / 2.0f * coord.Y;
-                    var y = Side * Sqrt3 * (coord.X + 0.5f * (coord.Y & 1));
-                    return (x, y);
-                }
-                case HexagonalGridType.FlatEven:
-                {
-                    var x = Side * 3.0f / 2.0f * coord.Y;
-                    var y = Side * Sqrt3 * (coord.X - 0.5f * (coord.Y & 1));
-                    return (x, y);
-                }
-                default:
-                    throw new HexagonalException($"{nameof(ToPoint2)} failed with unexpected {nameof(Type)}", this, (nameof(coord), coord));
-            }
+            return ToPoint2(ToAxial(coord));
         }
 
         /// <summary>

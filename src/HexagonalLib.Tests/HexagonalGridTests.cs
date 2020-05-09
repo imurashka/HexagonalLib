@@ -71,13 +71,17 @@ namespace HexagonalLib.Tests
             var offset = new Offset(offsetX, offsetY);
             var axial = grid.ToAxial(offset);
             var cubic = grid.ToCubic(offset);
-            Assert.IsTrue(cubic.IsValid(), $"Invalid cubic coordinate: {cubic.X}-{cubic.Y}-{cubic.Z}");
-            Assert.AreEqual(offset, grid.ToOffset(axial));
-            Assert.AreEqual(offset, grid.ToOffset(cubic));
-            Assert.AreEqual(axial, grid.ToAxial(offset));
-            Assert.AreEqual(axial, grid.ToAxial(cubic));
-            Assert.AreEqual(cubic, grid.ToCubic(offset));
-            Assert.AreEqual(cubic, grid.ToCubic(axial));
+
+            var fromOffset = grid.ToPoint2(offset);
+            var fromAxial = grid.ToPoint2(axial);
+            var fromCubic = grid.ToPoint2(cubic);
+
+            Assert.IsTrue(fromOffset.SimilarTo(fromAxial), $"Expected: {fromAxial.X}:{fromAxial.Y}; Actual: {fromOffset.X}:{fromOffset.Y}");
+            Assert.IsTrue(fromOffset.SimilarTo(fromCubic), $"Expected: {fromCubic.X}:{fromCubic.Y}; Actual: {fromOffset.X}:{fromOffset.Y}");
+
+            Assert.AreEqual(offset, grid.ToOffset(fromOffset));
+            Assert.AreEqual(axial, grid.ToAxial(fromAxial));
+            Assert.AreEqual(cubic, grid.ToCubic(fromCubic));
         }
 
         [Test(Author = "Ivan Murashka", Description = "Check IsNeighbor methods for all coordinates types")]
