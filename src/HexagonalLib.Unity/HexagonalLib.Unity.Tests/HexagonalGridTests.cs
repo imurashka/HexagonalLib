@@ -4,8 +4,10 @@ using NUnit.Framework;
 namespace HexagonalLib.Tests
 {
     [TestFixture]
-    public partial class HexagonalGridTests
+    public class HexagonalGridTests
     {
+        private float InscribedRadius => 0.5f;
+        
         [Test(Author = "Ivan Murashka", Description = "Check coordinate conversion from Offset to Unity vectors")]
         public void Vector2ConversionTest(
             [Values] HexagonalGridType type,

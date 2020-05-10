@@ -2,13 +2,17 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "HexagonalLib", "HexagonalLib\HexagonalLib.shproj", "{30905D5D-8D2E-4A25-ABEB-B4B4B0C440E6}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "HexagonalLib.Tests", "HexagonalLib.Tests\HexagonalLib.Tests.shproj", "{EFA80546-F632-4AAB-A785-DCDC988178B6}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "HexagonalLib.Unity", "HexagonalLib.Unity", "{C02A807F-4B02-4900-895F-67E25F8CF774}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HexagonalLib.Unity.Tests", "HexagonalLib.Unity\HexagonalLib.Unity.Tests\HexagonalLib.Unity.Tests.csproj", "{1E807875-014C-4745-86AB-E1E35916F8B3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HexagonalLib.Unity", "HexagonalLib.Unity\HexagonalLib.Unity\HexagonalLib.Unity.csproj", "{EE497232-AC7A-48D0-9059-53B152C6BF01}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "HexagonalLib.Net", "HexagonalLib.Net", "{1F507917-8D29-4061-BC98-7B64DABADED3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HexagonalLib.Net.Tests", "HexagonalLib.Net\HexagonalLib.Net.Tests\HexagonalLib.Net.Tests.csproj", "{2608E591-E33C-446A-9E95-AFED738B2512}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HexagonalLib.Net", "HexagonalLib.Net\HexagonalLib.Net\HexagonalLib.Net.csproj", "{CF391253-3550-40CF-810B-A6F8FCA2EBF2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,8 +24,6 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{30905D5D-8D2E-4A25-ABEB-B4B4B0C440E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{30905D5D-8D2E-4A25-ABEB-B4B4B0C440E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EFA80546-F632-4AAB-A785-DCDC988178B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EFA80546-F632-4AAB-A785-DCDC988178B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EE497232-AC7A-48D0-9059-53B152C6BF01}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE497232-AC7A-48D0-9059-53B152C6BF01}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EE497232-AC7A-48D0-9059-53B152C6BF01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -30,9 +32,19 @@ Global
 		{1E807875-014C-4745-86AB-E1E35916F8B3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1E807875-014C-4745-86AB-E1E35916F8B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1E807875-014C-4745-86AB-E1E35916F8B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF391253-3550-40CF-810B-A6F8FCA2EBF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF391253-3550-40CF-810B-A6F8FCA2EBF2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF391253-3550-40CF-810B-A6F8FCA2EBF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF391253-3550-40CF-810B-A6F8FCA2EBF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2608E591-E33C-446A-9E95-AFED738B2512}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2608E591-E33C-446A-9E95-AFED738B2512}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2608E591-E33C-446A-9E95-AFED738B2512}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2608E591-E33C-446A-9E95-AFED738B2512}.Debug|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{1E807875-014C-4745-86AB-E1E35916F8B3} = {C02A807F-4B02-4900-895F-67E25F8CF774}
 		{EE497232-AC7A-48D0-9059-53B152C6BF01} = {C02A807F-4B02-4900-895F-67E25F8CF774}
+		{CF391253-3550-40CF-810B-A6F8FCA2EBF2} = {1F507917-8D29-4061-BC98-7B64DABADED3}
+		{2608E591-E33C-446A-9E95-AFED738B2512} = {1F507917-8D29-4061-BC98-7B64DABADED3}
 	EndGlobalSection
 EndGlobal

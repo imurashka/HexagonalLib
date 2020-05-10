@@ -5,7 +5,7 @@ using static System.Math;
 namespace HexagonalLib.Tests
 {
     [TestFixture(TestOf = typeof(HexagonalGrid))]
-    public partial class HexagonalGridTests
+    public class HexagonalGridTests
     {
         private float InscribedRadius => 0.5f;
         private float DescribedRadius => (float) (InscribedRadius / Cos(PI / HexagonalGrid.EdgesCount));

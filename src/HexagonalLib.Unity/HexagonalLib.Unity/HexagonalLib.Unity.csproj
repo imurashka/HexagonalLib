@@ -18,7 +18,6 @@
         <DebugType>full</DebugType>
         <Optimize>false</Optimize>
         <OutputPath>..\..\.bin\HexagonalLib.Unity\Debug\</OutputPath>
-        <IntermediateOutputPath>..\..\.obj\HexagonalLib.Unity\Debug\</IntermediateOutputPath>
         <DefineConstants>DEBUG;TRACE</DefineConstants>
         <ErrorReport>prompt</ErrorReport>
         <WarningLevel>4</WarningLevel>
@@ -28,7 +27,6 @@
         <DebugType>pdbonly</DebugType>
         <Optimize>true</Optimize>
         <OutputPath>..\..\.bin\HexagonalLib.Unity\Release\</OutputPath>
-        <IntermediateOutputPath>..\..\.obj\HexagonalLib.Unity\Release\</IntermediateOutputPath>
         <DefineConstants>TRACE</DefineConstants>
         <ErrorReport>prompt</ErrorReport>
         <WarningLevel>4</WarningLevel>
@@ -39,8 +37,8 @@
         <Reference Include="System.Data" />
         <Reference Include="System.Xml" />
         <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-          <HintPath>..\packages\Unity3D.UnityEngine.2018.3.5.1\lib\UnityEngine.dll</HintPath>
-          <Private>True</Private>
+            <HintPath>..\..\packages\Unity3D.UnityEngine.2018.3.5.1\lib\UnityEngine.dll</HintPath>
+            <Private>False</Private>
         </Reference>
     </ItemGroup>
     <ItemGroup>
@@ -53,7 +51,7 @@
         <Compile Include="Utility\VectorUtility.cs" />
     </ItemGroup>
     <ItemGroup>
-      <None Include="packages.config" />
+        <None Include="packages.config" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <Import Project="..\..\HexagonalLib\HexagonalLib.projitems" Label="Shared" />

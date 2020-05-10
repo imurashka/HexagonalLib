@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <RootNamespace>HexagonalLib</RootNamespace>
+        <TargetFrameworks>net472;net48;netcoreapp3.1</TargetFrameworks>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Title>HexagonalLib</Title>
+        <Authors>Ivan Murashka</Authors>
+        <AssemblyVersion>1.0.0</AssemblyVersion>
+        <PackageProjectUrl>https://github.com/imurashka/HexagonalLib</PackageProjectUrl>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+        <OutputPath>..\..\.bin\HexagonalLib.Net\Debug\</OutputPath>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+        <OutputPath>..\..\.bin\HexagonalLib.Net\Release\</OutputPath>
+    </PropertyGroup>
+
+    <Import Project="..\..\HexagonalLib\HexagonalLib.projitems" Label="Shared" />
+
+</Project>
