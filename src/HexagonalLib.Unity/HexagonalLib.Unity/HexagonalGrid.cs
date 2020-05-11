@@ -1,4 +1,6 @@
-﻿using HexagonalLib.Coordinates;
+﻿using System;
+using System.Collections.Generic;
+using HexagonalLib.Coordinates;
 using HexagonalLib.Utility;
 using UnityEngine;
 
@@ -114,6 +116,54 @@ namespace HexagonalLib
         public Vector3 ToVector3(Cubic coord, float y = 0)
         {
             return ToPoint2(coord).AsVector3(y);
+        }
+
+        #endregion
+
+        #region CreateMesh
+
+        /// <summary>
+        /// Generates a mesh for list of hex. The generation algorithm is taken from the site:
+        /// </summary>
+        public Mesh CreateMesh(IReadOnlyList<Offset> hexes, int subdivide)
+        {
+            return CreateMesh(hexes, subdivide, CreateMesh);
+        }
+
+        /// <summary>
+        /// Generates a mesh for list of hex. The generation algorithm is taken from the site:
+        /// </summary>
+        public Mesh CreateMesh(IReadOnlyList<Axial> hexes, int subdivide)
+        {
+            return CreateMesh(hexes, subdivide, CreateMesh);
+        }
+
+        /// <summary>
+        /// Generates a mesh for list of hex. The generation algorithm is taken from the site:
+        /// </summary>
+        public Mesh CreateMesh(IReadOnlyList<Cubic> hexes, int subdivide)
+        {
+            return CreateMesh(hexes, subdivide, CreateMesh);
+        }
+
+        private Mesh CreateMesh<T>(IReadOnlyList<T> hexes, int subdivide, Action<IEnumerable<T>, int, Action<int, (float X, float Y)>, Action<int, int>> createMesh)
+        {
+            var meshData = GetMeshData(hexes.Count, subdivide);
+            var vertices = new Vector3[meshData.VerticesCount];
+            var triangles = new int[meshData.IndicesCount];
+
+            createMesh(hexes, subdivide,
+                (i, point) => vertices[i] = new Vector3(point.X, 0, point.Y),
+                (i, index) => triangles[i] = index);
+
+            var mesh = new Mesh
+            {
+                vertices = vertices,
+                triangles = triangles
+            };
+
+            mesh.RecalculateNormals();
+            return mesh;
         }
 
         #endregion
