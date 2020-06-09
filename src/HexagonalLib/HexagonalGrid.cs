@@ -126,7 +126,7 @@ namespace HexagonalLib
         #region ToOffset
 
         /// <summary>
-        /// Convert cube coordinate to offset
+        /// Convert cubic coordinate to offset
         /// </summary>
         public Offset ToOffset(Cubic coord)
         {
@@ -170,7 +170,7 @@ namespace HexagonalLib
         }
 
         /// <summary>
-        /// Convert point to offset coordinate
+        /// Returns the offset coordinate of the hex which contains a point
         /// </summary>
         public Offset ToOffset(float x, float y)
         {
@@ -178,7 +178,7 @@ namespace HexagonalLib
         }
 
         /// <summary>
-        /// Convert point to offset coordinate
+        /// Returns the offset coordinate of the hex which contains a point
         /// </summary>
         public Offset ToOffset((float X, float Y) point)
         {
@@ -190,7 +190,7 @@ namespace HexagonalLib
         #region ToAxial
 
         /// <summary>
-        /// Convert cube coordinate to axial
+        /// Convert cubic coordinate to axial
         /// </summary>
         public Axial ToAxial(Cubic cubic)
         {
@@ -206,7 +206,7 @@ namespace HexagonalLib
         }
 
         /// <summary>
-        /// Convert point to axial coordinate
+        /// Returns the axial coordinate of the hex which contains a point
         /// </summary>
         public Axial ToAxial(float x, float y)
         {
@@ -214,7 +214,7 @@ namespace HexagonalLib
         }
 
         /// <summary>
-        /// Convert point to axial coordinate
+        /// Returns the axial coordinate of the hex which contains a point
         /// </summary>
         public Axial ToAxial((float X, float Y) point)
         {
@@ -226,7 +226,7 @@ namespace HexagonalLib
         #region ToCubic
 
         /// <summary>
-        /// Convert offset coordinate to cube
+        /// Convert offset coordinate to cubic
         /// </summary>
         public Cubic ToCubic(Offset coord)
         {
@@ -266,7 +266,7 @@ namespace HexagonalLib
         }
 
         /// <summary>
-        /// Convert axial coordinate to cube
+        /// Convert axial coordinate to cubic
         /// </summary>
         public Cubic ToCubic(Axial axial)
         {
@@ -274,7 +274,7 @@ namespace HexagonalLib
         }
 
         /// <summary>
-        /// Convert point to cubic coordinate
+        /// Returns the cubic coordinate of the hex which contains a point
         /// </summary>
         public Cubic ToCubic(float x, float y)
         {
@@ -300,7 +300,7 @@ namespace HexagonalLib
         }
 
         /// <summary>
-        /// Convert point to cubic coordinate
+        /// Returns the cubic coordinate of the hex which contains a point
         /// </summary>
         public Cubic ToCubic((float X, float Y) point)
         {
