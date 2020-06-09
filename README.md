@@ -2,15 +2,15 @@
  
 _I was highly inspired by this article: [https://www.redblobgames.com/grids/hexagons/](https://www.redblobgames.com/grids/hexagons/) and this repo is mostly just C# implementation of it. Recommended for reading. Here I will describe some technical details regarding implementation._
  
-## Hexagonal grid initialization
+## Hexagonal grid
  
-To use hexagonal grids you need to create [HexagonalGrid](src\HexagonalLib\HexagonalGrid.cs) and initialize it with grid type and inscribed radius of hex. 
+To use hexagonal grids you need to create [HexagonalGrid](src/HexagonalLib/HexagonalGrid.cs) and initialize it with grid type and inscribed radius of hex. 
  
 ```C#
 var grid = new HexagonalGrid(HexagonalGridType.PointyEven, 1.0f);
 ```
  
-Grids layouts and orientations are merged to one enum [HexagonalGridType](src\HexagonalLib\HexagonalGridType.cs).
+Grids layouts and orientations are merged to one enum [HexagonalGridType](src/HexagonalLib/HexagonalGridType.cs).
  
 *   PointyOdd - Horizontal layout shoves odd rows right [odd-r]
 *   PointyEven - Horizontal layout shoves even rows right [even-r]
@@ -22,14 +22,14 @@ Grids layouts and orientations are merged to one enum [HexagonalGridType](src\He
  
 There is three coordinates systems represented in lib:
  
-*   [Offset](src\HexagonalLib\Coordinates\Offset.cs) - offset coordinates ([link](https://www.redblobgames.com/grids/hexagons/#coordinates-offset))
-*   [Cubic](src\HexagonalLib\Coordinates\Cubic.cs) - cube coordinates ([link](https://www.redblobgames.com/grids/hexagons/#coordinates-cube))
-*   [Axial](src\HexagonalLib\Coordinates\Axial.cs) -  axial coordinates ([link](https://www.redblobgames.com/grids/hexagons/#coordinates-axial))
+*   [Offset](src/HexagonalLib/Coordinates/Offset.cs) - offset coordinates ([link](https://www.redblobgames.com/grids/hexagons/#coordinates-offset))
+*   [Cubic](src/HexagonalLib/Coordinates/Cubic.cs) - cube coordinates ([link](https://www.redblobgames.com/grids/hexagons/#coordinates-cube))
+*   [Axial](src/HexagonalLib/Coordinates/Axial.cs) -  axial coordinates ([link](https://www.redblobgames.com/grids/hexagons/#coordinates-axial))
  
 _Note: there is no [Doubled](https://www.redblobgames.com/grids/hexagons/#coordinates-doubled) coordinates yet. I will add in later versions._
  
  
-Struct [HexagonalGrid](src\HexagonalLib\HexagonalGrid.cs) contains a bunch of methods for coordinates conversion (all details are [described](https://www.redblobgames.com/grids/hexagons/#conversions) in original article):
+Struct [HexagonalGrid](src/HexagonalLib/HexagonalGrid.cs) contains a bunch of methods for coordinates conversion (all details are [described](https://www.redblobgames.com/grids/hexagons/#conversions) in original article):
  
 ```C#
 var offsetFromCubic = grid.ToOffset(cubic);
