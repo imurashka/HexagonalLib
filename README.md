@@ -80,6 +80,3 @@ var isNeighbors1 = grid.IsNeighbors(offset, oNeighbor)
 var isNeighbors2 = grid.IsNeighbors(cubic, cNeighbor);
 var isNeighbors3 = grid.IsNeighbors(axial, aNeighbor);
 ```
-
-## Donations
-[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&hosted_button_id=FWCEN6GB98TC4)
