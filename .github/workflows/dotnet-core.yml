@@ -22,4 +22,4 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release --no-restore "src/HexagonalLib.sln"
     - name: Test
-      run: dotnet test --no-restore --verbosity normal "src/HexagonalLib.sln"
+      run: dotnet test "src/HexagonalLib.sln" --no-restore --verbosity normal
