@@ -20,6 +20,6 @@ jobs:
     - name: Install dependencies
       run: dotnet restore "src/HexagonalLib.sln"
     - name: Build
-      run: dotnet build --configuration Release --no-restore
+      run: dotnet build --configuration Release --no-restore "src/HexagonalLib.sln"
     - name: Test
-      run: dotnet test --no-restore --verbosity normal
+      run: dotnet test --no-restore --verbosity normal "src/HexagonalLib.sln"
