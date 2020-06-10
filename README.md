@@ -1,4 +1,4 @@
-# C# HexagonalLib
+# HexagonalLib implementation for .NET
  
 _I was highly inspired by this article: [https://www.redblobgames.com/grids/hexagons/](https://www.redblobgames.com/grids/hexagons/) and this repo is mostly just C# implementation of it. Recommended for reading. Here I will describe some technical details regarding implementation._
  
@@ -42,7 +42,60 @@ var axialFromOffset = grid.ToAxial(offset);
 var axialFromCubic = grid.ToAxial(cubic);
 ```
 
-## Point 
+## Neighbors
+ 
+There is the order of neighbors of hex:
+ 
+![](img/hex-neighbors-order.png)
+ 
+You can take a neighbor of any hex by providing a coordinate of hex and required neighbor index. 
+ 
+```C#
+var oNeighbor = grid.GetNeighbor(offset, neighborIndex);
+var cNeighbor = grid.GetNeighbor(cubic, neighborIndex);
+var aNeighbor = grid.GetNeighbor(axial, neighborIndex);
+```
+_The neighbor index can be negative or greater than 5 (it will be normalized)_
+
+Or you can take all neighbors of particular hex
+
+```C#
+var oNeighbors = grid.GetNeighbors(offset);
+var cNeighbors = grid.GetNeighbors(cubic);
+var aNeighbors = grid.GetNeighbors(axial);
+```
+ 
+There is also option to check are two hexes neighbors or not:
+ 
+```C#
+var isNeighbors1 = grid.IsNeighbors(offset, oNeighbor);
+var isNeighbors2 = grid.IsNeighbors(cubic, cNeighbor);
+var isNeighbors3 = grid.IsNeighbors(axial, aNeighbor);
+```
+
+### Ring of neighbors
+You also can get ring of neighbor for particular hex
+
+![](img/hex-rings.png)
+
+```C#
+var oNeighbors = grid.GetNeighborsRing(offset, radius);
+var cNeighbors = grid.GetNeighborsRing(cubic, radius);
+var aNeighbors = grid.GetNeighborsRing(axial, radius);
+```
+
+### Circle of neighbors
+Same as ring but you will receive hexes from all rings
+
+![](img/hex-around.png)
+
+```C#
+var oNeighbors = grid.GetNeighborsAround(offset, radius);
+var cNeighbors = grid.GetNeighborsAround(cubic, radius);
+var aNeighbors = grid.GetNeighborsAround(axial, radius);
+```
+
+## 2D space 
 
 There is also list of methods to convert hex coordinate to its center (point represented as tuple):
  
@@ -60,9 +113,8 @@ var cubicFromPoint = grid.ToCubic(x, y);
 var axialFromPoint = grid.ToAxial(x, y);
 ```
  
-## Corners
-
 Hexagons have 6 sides and 6 corners. There is corners order of the hexes:
+
 ![](img/hex-corners-order.png)
 
 To take them in code simly use:
@@ -73,26 +125,3 @@ var cornerFromCubic = grid.GetCorner(cubic, cornerIndex);
 var cornerFromAxial = grid.GetCorner(axial, cornerIndex);
 ```
 _The corner index can be negative or greater than 5 (it will be normalized)_
-
-## Neighbors
- 
-There is the order of neighbors of hex:
- 
-![](img/hex-neighbors-order.png)
- 
-You can take a neighbor of any hex by providing a coordinate of hex and required neighbor index. 
- 
-```C#
-var oNeighbor = grid.GetNeighbor(offset, neighborIndex);
-var cNeighbor = grid.GetNeighbor(cubic, neighborIndex);
-var aNeighbor = grid.GetNeighbor(axial, neighborIndex);
-```
-_The neighbor index can be negative or greater than 5 (it will be normalized)_
- 
-There is also option to check are two hexes neighbors or not:
- 
-```C#
-var isNeighbors1 = grid.IsNeighbors(offset, oNeighbor);
-var isNeighbors2 = grid.IsNeighbors(cubic, cNeighbor);
-var isNeighbors3 = grid.IsNeighbors(axial, aNeighbor);
-```
